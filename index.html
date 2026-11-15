@@ -312,7 +312,7 @@ svg{display:block}
         <li>岛上的字都能点喇叭听，她认的字不多也能自己用。</li>
       </ul>
       <h2>观看时间</h2>
-      <p>按分钟算，不按个数：每一段最多看 <b id="t-s">25</b> 分钟，然后休息 <b id="t-r">15</b> 分钟；每天最多 <b id="t-d">90</b> 分钟（周末 <b id="t-w">90</b>）。正在看的视频不会被半路打断；剩下的时间不够看完一个长视频，就请她挑短的或先休息。时间按播放页打开的时长算（暂停也算），只记在这台设备上。</p>
+      <p>按分钟算，不按个数：每一段最多看 <b id="t-s">30</b> 分钟，然后休息 <b id="t-r">10</b> 分钟；周一到周五每天最多 <b id="t-d">30</b> 分钟，周六周日每天最多 <b id="t-w">90</b> 分钟。正在看的视频不会被半路打断；剩下的时间不够看完一个长视频，就请她挑短的或先休息。时间按播放页打开的时长算（暂停也算），只记在这台设备上。</p>
       <p id="t-today" style="color:var(--label2)"></p>
       <div class="tset-btns"><button type="button" class="pill sm tinted purple" id="t-edit">改时间</button><button type="button" class="pill sm gray" id="t-bonus">今天再给 15 分钟</button><button type="button" class="pill sm gray" id="t-unrest">结束休息</button></div>
       <div id="t-form" hidden><div class="tset">
@@ -509,7 +509,7 @@ function embedUrl(v) {
 }
 // ---------- 看多久（只记在这台设备） ----------
 const TIME_KEY = 'island-time-v1', TSET_KEY = 'island-time-set-v1', PIN_KEY = 'island-pin-v1';
-const tset = Object.assign({session: 25, rest: 15, weekday: 90, weekend: 90}, store.get(TSET_KEY, {}));
+const tset = Object.assign({session: 30, rest: 10, weekday: 30, weekend: 90}, store.get(TSET_KEY, {}));
 let tstate = store.get(TIME_KEY, {});
 let watching = null;
 function tnow() {
