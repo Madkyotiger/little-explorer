@@ -79,7 +79,7 @@ svg{display:block}
 .island-wrap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16%;background:linear-gradient(transparent,var(--bg));pointer-events:none}
 .title{position:absolute;left:0;right:0;top:calc(2.4% + var(--safe-t));margin:0;text-align:center;font-size:clamp(30px,8.6vw,48px);font-weight:800;letter-spacing:.04em;color:#fff;
   text-shadow:0 1px 2px rgba(150,60,140,.35),0 6px 22px rgba(190,80,170,.45)}
-.spot{position:absolute;width:38%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;z-index:2}
+.spot{position:absolute;width:32%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;z-index:2}
 .spot-label{position:absolute;left:50%;bottom:-1%;transform:translateX(-50%);white-space:nowrap;display:inline-flex;align-items:center;gap:4px;
   height:34px;padding:0 14px;border-radius:999px;font-weight:700;font-size:clamp(15px,4.1vw,18px);color:var(--label);transition:transform .15s}
 .spot:active .spot-label{transform:translateX(-50%) scale(.94)}
@@ -199,7 +199,12 @@ svg{display:block}
 .tset{display:grid;grid-template-columns:1fr auto;gap:10px 12px;align-items:center;margin:8px 0 12px}
 .tset input{width:72px;font:inherit;padding:6px 8px;border-radius:10px;border:1px solid var(--sep);text-align:center}
 .tset-btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
-.spot.small{width:22%}
+.spot.small{width:24%}
+.island-wrap.wide{aspect-ratio:1672/941;width:min(100%,calc(78vh * 1672 / 941));margin:0 auto}
+.island-wrap.wide .spot,.island-wrap.wide .spot.small{width:19%}
+.island-wrap.wide .spot.small .spot-label{top:auto;bottom:-1%;transform:translateX(-50%)}
+.island-wrap.wide .spot.small:active .spot-label{transform:translateX(-50%) scale(.94)}
+.island-wrap.wide .title{top:calc(1.2% + var(--safe-t));font-size:clamp(30px,4.2vw,52px)}
 .spot.small .spot-label{bottom:auto;top:50%;transform:translate(-50%,-50%)}
 .spot.small:active .spot-label{transform:translate(-50%,-50%) scale(.94)}
 .spot.small .sparkle{right:-4%;top:-4%}
@@ -325,7 +330,7 @@ svg{display:block}
       <h2>大人看什么</h2>
       <p>隔一两周翻一下探索本：她问了什么、做了什么、反复回去看什么、会不会讲给你听。这些比看了多少条更能说明兴趣。“我想知道”里的问题，是下一批加视频最好的线索。别因为她喜欢某样就马上加码报班，她很快会学会不点。</p>
       <h2>视频怎么挑的</h2>
-      <p>每条都用 B 站公开接口核过：真实存在、免费可看（不收充电专属和付费课），优先官方机构和原作者的号。转载的在播放页“给大人看”里写明。不是逐条从头看完的白名单，舞蹈视频只看过封面，最好先看一眼。视频快播完时，网页会用自己的“看完啦”画面盖住播放器，挡住 B 站播完后的推荐；如果她中途暂停过，这个画面可能提前出现，点“还没看完”就能接着看。播放中 B 站自己的“进入哔哩哔哩”按钮网页挡不住，要彻底防跳转，用 iPad“屏幕使用时间”把 www.bilibili.com 和 m.bilibili.com 设成“永不允许”。“去 B 站看高清”会进 B 站自己的推荐。</p>
+      <p>每条都用 B 站公开接口核过：真实存在、免费可看（不收充电专属和付费课），优先官方机构和原作者的号。转载的在播放页“给大人看”里写明。不是逐条从头看完的白名单，舞蹈视频只看过封面，最好先看一眼。视频快播完时，网页会用自己的“看完啦”画面盖住播放器，挡住 B 站播完后的推荐；如果她中途暂停过，这个画面可能提前出现，点“还没看完”就能接着看。在 iPad 和电脑上，播放器里的标题、头像、“进入哔哩哔哩”等点了都不会再打开 B 站（网页禁止了播放器弹出新页面）；在手机上 B 站换成手机版播放器，这一招会让视频黑屏，所以手机上还挡不住，最好用平板看。“去 B 站看高清”会进 B 站自己的推荐。</p>
       <h2>所有视频</h2>
       <div id="g-list"></div>
       <p style="font-size:13px;color:var(--label2);margin-top:16px">视频清单的维护方式参考开源项目 <a href="https://github.com/limin112/bilipicks" target="_blank" rel="noopener noreferrer">BiliPicks</a>（MIT，MinLiBuilds）。本站不是 B 站官方产品，视频版权归各 UP 主所有。<span id="g-built"></span></p>
@@ -436,13 +441,19 @@ window.addEventListener('hashchange', route);
 document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) go(g.dataset.go); });
 
 // ---------- 岛 ----------
+// 横着拿的平板/电脑用横版岛图，竖屏和手机用竖版
+const WIDE_MQ = matchMedia('(min-aspect-ratio: 1/1) and (min-width: 900px)');
+WIDE_MQ.addEventListener && WIDE_MQ.addEventListener('change', () => { if (current.view === 'home') renderHome(); });
 function renderHome() {
-  const wrap = $('#island');
+  const wrap = $('#island'), wide = WIDE_MQ.matches;
+  wrap.classList.toggle('wide', wide);
+  const im = $('.island', wrap), want = wide ? 'assets/island-wide.webp' : 'assets/island.webp';
+  if (!im.src.endsWith(want)) im.src = want;
   $$('.spot', wrap).forEach(s => s.remove());
   PLACES.forEach(p => {
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'spot' + (p.small ? ' small' : '');
-    b.style.left = p.x + '%'; b.style.top = p.y + '%';
+    b.style.left = (wide ? p.wx : p.x) + '%'; b.style.top = (wide ? p.wy : p.y) + '%';
     b.setAttribute('aria-label', p.name);
     b.innerHTML = `${ic('spark', 'sparkle')}<span class="spot-label glass">${esc(p.name)}${visited[p.id] ? ic('star', 'star') : ''}</span>`;
     b.onclick = () => { visited[p.id] = 1; store.set(VISIT_KEY, visited); say(`place-${p.id}`); go('place/' + p.id, true); };
@@ -596,9 +607,20 @@ function showEnd() {
   $('#end-more').onclick = () => {
     clearTimeout(endKill);
     if (over) tstate.restUntil = 0;
-    if (!$('#player iframe')) { const f = document.createElement('iframe'); f.allow = 'autoplay; fullscreen; encrypted-media'; f.allowFullscreen = true; f.src = embedUrl(v) + `&t=${Math.max(0, v.duration - 150)}`; $('#player').prepend(f); }
+    if (!$('#player iframe')) $('#player').prepend(makeFrame(v, `&t=${Math.max(0, v.duration - 150)}`));
     c.remove(); watching.cover = false; watching.elapsed = Math.max(0, v.duration - 120);
   };
+}
+// 播放器里点哪儿都会用 window.open 打开 B 站。iPad/电脑用的是桌面版播放器，加 sandbox（不给 allow-popups）就弹不出去，播放不受影响；
+// 手机 UA 会被 B 站转到手机版播放器，那个一加 sandbox 就黑屏，只能不加（B 站自己的判断规则：AppleWebKit.*Mobile 且不含 Domono）。
+const MOBILE_PLAYER = /AppleWebKit.*Mobile.*/.test(navigator.userAgent) && !/Domono/.test(navigator.userAgent);
+function makeFrame(v, extra = '') {
+  const f = document.createElement('iframe');
+  f.title = v.kidTitle || v.title; f.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture'; f.allowFullscreen = true;
+  f.referrerPolicy = 'no-referrer-when-downgrade';
+  if (!MOBILE_PLAYER) f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
+  f.src = embedUrl(v) + extra;
+  return f;
 }
 function paintLike(v) {
   const b = $('#like-btn'), on = !!likes[v.id];
@@ -614,9 +636,7 @@ function renderWatch(id) {
   const pt = fromPatient ? DATA.patients.find(x => x.id === fromPatient) : null;
   $('#watch-back span').textContent = pt ? '岛上' : p.name;
   $('#watch-back').onclick = () => go(pt ? '' : 'place/' + p.id);
-  const f = document.createElement('iframe');
-  f.title = v.kidTitle; f.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture'; f.allowFullscreen = true;
-  f.referrerPolicy = 'no-referrer-when-downgrade'; f.src = embedUrl(v);
+  const f = makeFrame(v);
   $('#player').innerHTML = ''; $('#player').appendChild(f);
   paintTime();
   $('#watch-title').innerHTML = `${esc(v.kidTitle || v.title)}<span class="sub">${esc(p.name)} · ${esc(mins(v.duration))}</span>`;
