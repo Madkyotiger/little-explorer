@@ -1,9 +1,9 @@
 // 自动生成，别手改：python3 tools/build_sw.py
 // 小小探索岛的本机副本。第一次打开后在后台把页面、图片、语音存到这台设备；
 // 之后打开直接从本机读。网页更新时只下载内容变了的文件（按指纹比对）。
-const V = 'ec020ec9b8';
+const V = '97dc6f73ca';
 const FILES = {
-"index.html": "5e0a2960c4",
+"index.html": "e037f814c2",
 "data.js": "2a084ce03c",
 "assets/chest.webp": "24235b6e82",
 "assets/cv-shh-p1.webp": "9a7339058e",
