@@ -186,6 +186,44 @@ svg{display:block}
 .toast{position:fixed;left:50%;top:calc(12px + var(--safe-t));transform:translate(-50%,-140%);display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;font-weight:600;font-size:15px;z-index:80;pointer-events:none;transition:transform .35s cubic-bezier(.2,.9,.3,1.1);max-width:90vw;color:var(--label)}
 .toast.show{transform:translate(-50%,0)}
 .toast .ic{color:var(--tint)}
+/* 看完遮罩、时间 */
+.endcover{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;text-align:center;
+  background:linear-gradient(160deg,#fde7f3,#ede1fb);color:var(--label)}
+.endcover img{width:clamp(64px,16%,120px);height:auto;border-radius:50%;background:#fff}
+.endcover h2{margin:0;font-size:clamp(20px,4.6vw,30px);font-weight:700}
+.endcover .row{width:min(100%,460px)}
+.endcover .link{font-size:15px;color:var(--label2);text-decoration:underline;padding:4px 10px}
+.timebar{display:flex;align-items:center;gap:8px;margin:12px 16px 0;font-size:14px;color:var(--label2)}
+.timebar .ic{color:var(--purple)}
+.rest-clock{font-size:44px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--purple);margin:2px 0 14px}
+.tset{display:grid;grid-template-columns:1fr auto;gap:10px 12px;align-items:center;margin:8px 0 12px}
+.tset input{width:72px;font:inherit;padding:6px 8px;border-radius:10px;border:1px solid var(--sep);text-align:center}
+.tset-btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.spot.small{width:22%}
+.spot.small .spot-label{bottom:auto;top:50%;transform:translate(-50%,-50%)}
+.spot.small:active .spot-label{transform:translate(-50%,-50%) scale(.94)}
+.spot.small .sparkle{right:-4%;top:-4%}
+/* iPad 竖屏／横屏：放大，不再是一条手机窄栏 */
+@media (min-width:700px){
+  body{font-size:19px}
+  .app{max-width:880px}
+  .island-wrap{width:min(100%,calc(82vh * 1086 / 1448));margin:0 auto}
+  .spot-label{font-size:20px;height:42px;padding:0 18px}
+  .notice{width:min(calc(100% - 28px),680px);margin:-56px auto 0;padding:16px}
+  .notice .tx p{font-size:20px}
+  .notice .av{width:64px;height:64px}.notice .pt{width:80px;height:80px}
+  .home-list{max-width:680px;margin-left:auto;margin-right:auto}
+  .hero{aspect-ratio:21/8;border-radius:0 0 28px 28px}
+  .large-title h1{font-size:40px}
+  .tiles{grid-template-columns:repeat(3,1fr);gap:26px 18px;padding:22px 20px 4px}
+  .tile .meta b{font-size:18px}
+  .watch-title h1{font-size:32px}
+  .pill{min-height:56px;font-size:19px}
+  .sheet{max-width:560px}
+  .sheet .lead{font-size:21px}
+  .photos{grid-template-columns:repeat(4,1fr)}
+}
+@media (min-width:1000px){.app{max-width:1040px}.tiles{grid-template-columns:repeat(4,1fr)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -205,6 +243,7 @@ svg{display:block}
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M19.7 6.3a1.1 1.1 0 0 1 0 1.6l-9.5 9.5a1.1 1.1 0 0 1-1.6 0l-4.3-4.3a1.1 1.1 0 1 1 1.6-1.6l3.5 3.5 8.7-8.7a1.1 1.1 0 0 1 1.6 0z"/></symbol>
   <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M12 4a8 8 0 0 1 7.4 5H17a1 1 0 1 0 0 2h4.5a1 1 0 0 0 1-1V5.5a1 1 0 1 0-2 0v1.9A10 10 0 0 0 2.1 10.9a1 1 0 1 0 2 .3A8 8 0 0 1 12 4zm9.1 8.8a1 1 0 0 0-1.1.9A8 8 0 0 1 4.6 15H7a1 1 0 1 0 0-2H2.5a1 1 0 0 0-1 1v4.5a1 1 0 1 0 2 0v-1.9a10 10 0 0 0 18.4-2.7 1 1 0 0 0-.8-1.1z"/></symbol>
   <symbol id="i-trash" viewBox="0 0 24 24"><path d="M9.5 3h5a1.5 1.5 0 0 1 1.5 1.5V5h3.5a1 1 0 1 1 0 2h-.6l-.8 12.1A2.5 2.5 0 0 1 15.6 21H8.4a2.5 2.5 0 0 1-2.5-1.9L5.1 7h-.6a1 1 0 0 1 0-2H8v-.5A1.5 1.5 0 0 1 9.5 3zM7.1 7l.8 11.9c0 .3.3.6.5.6h7.2c.3 0 .5-.3.5-.6L16.9 7H7.1z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><path d="M12 2.5a9.5 9.5 0 1 1 0 19 9.5 9.5 0 0 1 0-19zm0 2a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15zm0 2.3a1 1 0 0 1 1 1v3.8l2.6 1.6a1 1 0 1 1-1 1.7l-3.1-1.9a1 1 0 0 1-.5-.9V7.8a1 1 0 0 1 1-1z"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 2.8z"/></symbol>
 </svg>
 
@@ -236,6 +275,7 @@ svg{display:block}
     <div class="navbar"><button type="button" class="nav-back" id="watch-back"><svg class="ic"><use href="#i-back"/></svg><span></span></button></div>
     <div class="player" id="player"></div>
     <div class="waiting" id="watch-patient" hidden></div>
+    <div class="timebar" id="watch-time"></div>
     <div class="watch-title"><h1 id="watch-title"></h1><button type="button" class="circle tinted" id="watch-say" aria-label="听一听"><svg class="ic"><use href="#i-speaker"/></svg></button></div>
     <div class="actions">
       <button type="button" class="pill block filled green" id="helped-btn" hidden><svg class="ic"><use href="#i-check"/></svg>我帮到它啦</button>
@@ -263,7 +303,7 @@ svg{display:block}
     <div class="navbar"><button type="button" class="nav-back" data-go=""><svg class="ic"><use href="#i-back"/></svg><span>岛上</span></button></div>
     <div class="prose">
       <h1>写给大人</h1>
-      <p>这是<strong id="g-curator">爸爸</strong>给<strong id="g-audience">7 岁</strong>孩子挑的视频小岛。按她自己说过喜欢的方向分成 6 个地方：动物医院、动物园、微观世界（细菌和病毒）、恐龙谷、游泳湾、舞台。没有推荐算法，没有积分、打卡和上锁。</p>
+      <p>这是<strong id="g-curator">爸爸</strong>给<strong id="g-audience">7 岁</strong>孩子挑的视频小岛。按她自己说过喜欢的方向分成 8 个地方：动物医院、动物园、微观世界（细菌和病毒）、恐龙谷、游泳湾、舞台，还有天上的云上山海（《山海经》）和瀑布边的英语小剧场（英文动画）。没有推荐算法，没有积分、打卡和上锁。</p>
       <h2>岛上有什么</h2>
       <ul>
         <li><strong>今天的小病人</strong>：每天有一只小动物来敲门，问一个问题，视频就是答案。一天一个，不看也没有损失。</li>
@@ -271,10 +311,21 @@ svg{display:block}
         <li><strong>探索本</strong>：她拍的照片、录的话、“我想知道”的问题、喜欢的视频。照片和录音只存在这台设备的浏览器里，不上传；换设备不同步，清除浏览数据会丢。</li>
         <li>岛上的字都能点喇叭听，她认的字不多也能自己用。</li>
       </ul>
+      <h2>观看时间</h2>
+      <p>按分钟算，不按个数：每一段最多看 <b id="t-s">25</b> 分钟，然后休息 <b id="t-r">15</b> 分钟；每天最多 <b id="t-d">90</b> 分钟（周末 <b id="t-w">90</b>）。正在看的视频不会被半路打断；剩下的时间不够看完一个长视频，就请她挑短的或先休息。时间按播放页打开的时长算（暂停也算），只记在这台设备上。</p>
+      <p id="t-today" style="color:var(--label2)"></p>
+      <div class="tset-btns"><button type="button" class="pill sm tinted purple" id="t-edit">改时间</button><button type="button" class="pill sm gray" id="t-bonus">今天再给 15 分钟</button><button type="button" class="pill sm gray" id="t-unrest">结束休息</button></div>
+      <div id="t-form" hidden><div class="tset">
+        <label for="ti-s">每段最多（分钟）</label><input id="ti-s" type="number" min="5" max="60" inputmode="numeric">
+        <label for="ti-r">休息（分钟）</label><input id="ti-r" type="number" min="0" max="60" inputmode="numeric">
+        <label for="ti-d">周一到周五每天最多（分钟）</label><input id="ti-d" type="number" min="0" max="240" inputmode="numeric">
+        <label for="ti-w">周六周日每天最多（分钟）</label><input id="ti-w" type="number" min="0" max="240" inputmode="numeric">
+      </div><button type="button" class="pill sm filled" id="t-save">保存</button></div>
+      <p style="font-size:14px;color:var(--label2)">这几个按钮要输大人密码（第一次用时设置，4 位数字，只存在这台设备上）。网页里的计时孩子清掉浏览数据就会重置；要硬性限制，用 iPad 的“屏幕使用时间”给这个网站设每日限额。</p>
       <h2>大人看什么</h2>
       <p>隔一两周翻一下探索本：她问了什么、做了什么、反复回去看什么、会不会讲给你听。这些比看了多少条更能说明兴趣。“我想知道”里的问题，是下一批加视频最好的线索。别因为她喜欢某样就马上加码报班，她很快会学会不点。</p>
       <h2>视频怎么挑的</h2>
-      <p>每条都用 B 站公开接口核过：真实存在、免费可看（不收充电专属和付费课），优先官方机构和原作者的号。转载的在播放页“给大人看”里写明。不是逐条从头看完的白名单，舞蹈视频只看过封面，最好先看一眼。B 站播放器播完有时会显示别的视频，这一点网页控制不了；“去 B 站看高清”会进 B 站自己的推荐。</p>
+      <p>每条都用 B 站公开接口核过：真实存在、免费可看（不收充电专属和付费课），优先官方机构和原作者的号。转载的在播放页“给大人看”里写明。不是逐条从头看完的白名单，舞蹈视频只看过封面，最好先看一眼。视频快播完时，网页会用自己的“看完啦”画面盖住播放器，挡住 B 站播完后的推荐；如果她中途暂停过，这个画面可能提前出现，点“还没看完”就能接着看。播放中 B 站自己的“进入哔哩哔哩”按钮网页挡不住，要彻底防跳转，用 iPad“屏幕使用时间”把 www.bilibili.com 和 m.bilibili.com 设成“永不允许”。“去 B 站看高清”会进 B 站自己的推荐。</p>
       <h2>所有视频</h2>
       <div id="g-list"></div>
       <p style="font-size:13px;color:var(--label2);margin-top:16px">视频清单的维护方式参考开源项目 <a href="https://github.com/limin112/bilipicks" target="_blank" rel="noopener noreferrer">BiliPicks</a>（MIT，MinLiBuilds）。本站不是 B 站官方产品，视频版权归各 UP 主所有。<span id="g-built"></span></p>
@@ -340,14 +391,21 @@ function toast(msg, icon = 'check') { const t = $('#toast'); t.innerHTML = `${ic
 let dbp;
 function db() {
   if (!dbp) dbp = new Promise((res, rej) => {
-    const r = indexedDB.open('island-book', 1);
+    // iPad Safari 存 Blob 刷新后会读不出来，改存 ArrayBuffer；换新库名，旧库里读不出的记录不再拖累整本
+    const r = indexedDB.open('island-book-2', 1);
     r.onupgradeneeded = () => r.result.createObjectStore('works', {keyPath: 'id', autoIncrement: true});
     r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
   });
   return dbp;
 }
-async function addWork(w) { const d = await db(); return new Promise((res, rej) => { const tx = d.transaction('works', 'readwrite'); tx.objectStore('works').add({...w, at: Date.now()}); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); }
-async function allWorks() { const d = await db(); return new Promise((res, rej) => { const r = d.transaction('works').objectStore('works').getAll(); r.onsuccess = () => res(r.result.reverse()); r.onerror = () => rej(r.error); }); }
+async function addWork(w) {
+  const {blob, ...rest} = w;
+  const buf = await blob.arrayBuffer();  // 先转好再开事务，事务里不能 await
+  try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch {}
+  const d = await db();
+  await new Promise((res, rej) => { const tx = d.transaction('works', 'readwrite'); tx.objectStore('works').add({...rest, buf, mime: blob.type || '', at: Date.now()}); tx.oncomplete = res; tx.onerror = () => rej(tx.error); tx.onabort = () => rej(tx.error); });
+}
+async function allWorks() { const d = await db(); return new Promise((res, rej) => { const r = d.transaction('works').objectStore('works').getAll(); r.onsuccess = () => res(r.result.filter(w => w.buf).map(w => ({...w, blob: new Blob([w.buf], {type: w.mime})})).reverse()); r.onerror = () => rej(r.error); }); }
 async function delWork(id) { const d = await db(); return new Promise(res => { const tx = d.transaction('works', 'readwrite'); tx.objectStore('works').delete(id); tx.oncomplete = res; }); }
 
 // ---------- 页面切换 ----------
@@ -356,7 +414,8 @@ let fromPatient = null, keepVoice = false;
 function route() {
   const [view, arg] = location.hash.slice(1).split('/');
   closeModal();
-  $('#player').innerHTML = '';
+  $('#player').innerHTML = ''; clearTimeout(endKill);
+  if (watching) { store.set(TIME_KEY, tnow()); watching = null; }
   $$('section[id^="v-"]').forEach(s => s.hidden = true);
   if (view === 'place' && placeById[arg]) { current = {view, arg}; renderPlace(arg); }
   else if (view === 'watch' && byId[arg]) { current = {view, arg}; renderWatch(arg); }
@@ -382,7 +441,7 @@ function renderHome() {
   $$('.spot', wrap).forEach(s => s.remove());
   PLACES.forEach(p => {
     const b = document.createElement('button');
-    b.type = 'button'; b.className = 'spot';
+    b.type = 'button'; b.className = 'spot' + (p.small ? ' small' : '');
     b.style.left = p.x + '%'; b.style.top = p.y + '%';
     b.setAttribute('aria-label', p.name);
     b.innerHTML = `${ic('spark', 'sparkle')}<span class="spot-label glass">${esc(p.name)}${visited[p.id] ? ic('star', 'star') : ''}</span>`;
@@ -416,7 +475,7 @@ function openPatient() {
   const sayPt = () => { if (!$('#modal').hidden) say(`p-${pt.id}`, $('#pt-say')); };
   if (done) sayPt(); else say('line-patientIntro', null, sayPt);
   $('#pt-say').onclick = e => say(`p-${pt.id}`, e.currentTarget);
-  $('#pt-go').onclick = () => { fromPatient = pt.id; go('watch/' + pt.video); };
+  $('#pt-go').onclick = () => { fromPatient = pt.id; tryWatch(pt.video); };
 }
 
 // ---------- 地点 ----------
@@ -428,7 +487,7 @@ function bindTiles(root) {
     const s = e.target.closest('[data-say]');
     if (s) { e.stopPropagation(); say(s.dataset.say, s); return; }
     const c = e.target.closest('.tile');
-    if (c) go('watch/' + c.dataset.vid);
+    if (c) tryWatch(c.dataset.vid);
   };
 }
 function renderPlace(id) {
@@ -445,8 +504,101 @@ function renderPlace(id) {
 
 // ---------- 播放 ----------
 function embedUrl(v) {
-  const pg = v.page > 1 ? `&p=${v.page}` : '';
-  return `https://player.bilibili.com/player.html?bvid=${encodeURIComponent(v.id)}${pg}&high_quality=1&danmaku=0&autoplay=1&as_wide=1`;
+  const q = v.ep ? `episodeId=${v.ep}` : `bvid=${encodeURIComponent(v.bvid || v.id)}${v.page > 1 ? `&p=${v.page}` : ''}`;
+  return `https://player.bilibili.com/player.html?${q}&high_quality=1&danmaku=0&autoplay=1&as_wide=1`;
+}
+// ---------- 看多久（只记在这台设备） ----------
+const TIME_KEY = 'island-time-v1', TSET_KEY = 'island-time-set-v1', PIN_KEY = 'island-pin-v1';
+const tset = Object.assign({session: 25, rest: 15, weekday: 90, weekend: 90}, store.get(TSET_KEY, {}));
+let tstate = store.get(TIME_KEY, {});
+let watching = null;
+function tnow() {
+  if (tstate.day !== today()) tstate = {day: today(), used: 0, sess: 0, last: 0, restUntil: 0, bonus: 0};
+  const now = Date.now();
+  if (tstate.restUntil && tstate.restUntil <= now) { tstate.restUntil = 0; tstate.sess = 0; }
+  if (!tstate.restUntil && tstate.last && now - tstate.last > tset.rest * 60e3) tstate.sess = 0;
+  return tstate;
+}
+const isWeekend = () => [0, 6].includes(new Date().getDay());
+const capToday = () => (isWeekend() ? tset.weekend : tset.weekday) * 60 + (tnow().bonus || 0);
+const GRACE = 180;
+function gate(v) {
+  const s = tnow(), dur = (v && v.duration) || 0, cap = capToday();
+  if (s.restUntil) return 'rest';
+  if (s.used >= cap - 60) return 'day';
+  if (dur && s.used + dur > cap + GRACE) return 'dayshort';
+  if (s.sess >= tset.session * 60 - 60) return 'restnow';
+  if (s.sess > 0 && dur && s.sess + dur > tset.session * 60 + GRACE) return 'short';
+  return null;
+}
+function startRest() { const s = tnow(); s.restUntil = Date.now() + tset.rest * 60e3; store.set(TIME_KEY, s); }
+const mmss = sec => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`;
+let restTimer;
+function openGate(why, v) {
+  clearInterval(restTimer);
+  if (why === 'restnow') { startRest(); why = 'rest'; }
+  const guide = `<div class="grabber"></div><button type="button" class="circle gray sm x" data-close aria-label="关上">${ic('x')}</button><img class="hero-pt" src="assets/guide.webp" alt="" style="width:120px;height:120px;border-radius:50%">`;
+  if (why === 'rest') {
+    openModal(`${guide}<h2>眼睛休息一下</h2><p class="lead">看看远处，或者去做一个“我想试试”。</p><div class="rest-clock" id="rest-clock"></div>
+      <div class="stack"><button type="button" class="pill block tinted purple" id="g-try">${ic('spark')}我想试试</button><button type="button" class="pill block gray" id="g-book">看看探索本</button></div>`);
+    const tick = () => { const left = (tnow().restUntil - Date.now()) / 1000; const c = $('#rest-clock'); if (!c) return clearInterval(restTimer); if (left <= 0) { clearInterval(restTimer); c.textContent = '可以啦！'; return; } c.textContent = mmss(left); };
+    tick(); restTimer = setInterval(tick, 1000);
+    say('line-rest');
+  } else if (why === 'day' || why === 'dayshort') {
+    openModal(`${guide}<h2>${why === 'day' ? '今天的视频时间用完啦' : '今天剩下的时间不够看这个啦'}</h2><p class="lead">${why === 'day' ? '明天岛上还有新的小病人。' : `今天还剩 ${Math.max(0, Math.round((capToday() - tnow().used) / 60))} 分钟，可以挑一个短一点的。`}</p>
+      <div class="stack"><button type="button" class="pill block tinted purple" id="g-try">${ic('spark')}我想试试</button><button type="button" class="pill block gray" id="g-book">看看探索本</button></div>`);
+    say(why === 'day' ? 'line-dayDone' : 'line-tooLong');
+  } else if (why === 'short') {
+    openModal(`${guide}<h2>这个有点长</h2><p class="lead">这一段还剩 ${Math.max(1, Math.round((tset.session * 60 - tnow().sess) / 60))} 分钟，不够看完它。挑一个短一点的，或者先休息一下吧。</p>
+      <div class="stack"><button type="button" class="pill block filled" data-close>挑短一点的</button><button type="button" class="pill block gray" id="g-rest">先休息一下</button></div>`);
+    say('line-tooLong');
+  }
+  const t = $('#g-try'); if (t) t.onclick = () => openTry(v ? placeOf(v).id : PLACES[Math.floor(Math.random() * PLACES.length)].id);
+  const b = $('#g-book'); if (b) b.onclick = () => go('book');
+  const r = $('#g-rest'); if (r) r.onclick = () => openGate('restnow', v);
+}
+function tryWatch(id) { const v = byId[id]; const g = gate(v); if (g) return openGate(g, v); go('watch/' + id); }
+function paintTime() {
+  const s = tnow(), el = $('#watch-time'); if (!el) return;
+  const leftS = Math.max(0, tset.session * 60 - s.sess), leftD = Math.max(0, capToday() - s.used);
+  el.innerHTML = `${ic('clock')}<span>这一段还能看 ${Math.ceil(Math.min(leftS, leftD) / 60)} 分钟</span>`;
+}
+// 每秒记一次：只在播放页、页面在前台、没有被“看完啦”盖住时计时
+setInterval(() => {
+  if (!watching || current.view !== 'watch' || document.hidden || watching.cover) return;
+  const s = tnow(); s.used += 1; s.sess += 1; s.last = Date.now();
+  if (s.used % 5 === 0) store.set(TIME_KEY, s);
+  watching.elapsed += 1;
+  if (watching.elapsed % 30 === 0) paintTime();
+  if (watching.v.duration && watching.elapsed >= watching.v.duration - 2) showEnd();
+}, 1000);
+// 手机平板要点一下才开始播：第一次点进播放器时，把“已播放”从这一刻算起
+window.addEventListener('blur', () => setTimeout(() => {
+  if (watching && watching.coarseStart && document.activeElement && document.activeElement.tagName === 'IFRAME') { if (watching.elapsed < 40) watching.elapsed = 0; watching.coarseStart = false; }
+}, 0));
+let endKill;
+function showEnd() {
+  if (!watching || watching.cover) return;
+  watching.cover = true; store.set(TIME_KEY, tnow());
+  const v = watching.v, over = gate(null) !== null || tnow().sess >= tset.session * 60 - 60;
+  const c = document.createElement('div'); c.className = 'endcover';
+  c.innerHTML = `<img src="assets/guide.webp" alt=""><h2>${over ? '这一段看完啦，眼睛休息一下' : '看完啦！'}</h2>
+    <div class="row">${over ? `<button type="button" class="pill tinted purple" id="end-try">${ic('spark')}我想试试</button>` : `<button type="button" class="pill filled" id="end-again">${ic('play')}再看一遍</button>`}<button type="button" class="pill gray" id="end-home">回岛上</button></div>
+    <button type="button" class="link" id="end-more">还没看完</button>`;
+  $('#player').appendChild(c);
+  if (over) startRest();
+  say(over ? 'line-rest' : 'line-endDone');
+  // 20 秒没人点“还没看完”，就把播放器拿掉，免得 B 站接着放下一个
+  clearTimeout(endKill); endKill = setTimeout(() => { const f = $('#player iframe'); if (f && watching && watching.cover) f.remove(); }, 20000);
+  const a = $('#end-again'); if (a) a.onclick = () => tryWatch(v.id);
+  const t = $('#end-try'); if (t) t.onclick = () => openTry(placeOf(v).id);
+  $('#end-home').onclick = () => go('');
+  $('#end-more').onclick = () => {
+    clearTimeout(endKill);
+    if (over) tstate.restUntil = 0;
+    if (!$('#player iframe')) { const f = document.createElement('iframe'); f.allow = 'autoplay; fullscreen; encrypted-media'; f.allowFullscreen = true; f.src = embedUrl(v) + `&t=${Math.max(0, v.duration - 150)}`; $('#player').prepend(f); }
+    c.remove(); watching.cover = false; watching.elapsed = Math.max(0, v.duration - 120);
+  };
 }
 function paintLike(v) {
   const b = $('#like-btn'), on = !!likes[v.id];
@@ -456,6 +608,9 @@ function paintLike(v) {
 }
 function renderWatch(id) {
   const v = byId[id], p = placeOf(v);
+  const g = gate(v);
+  if (g) { setTimeout(() => { history.replaceState(null, '', '#place/' + p.id); route(); openGate(g, v); }, 0); return; }
+  watching = {v, elapsed: 0, cover: false, coarseStart: matchMedia('(pointer:coarse)').matches};
   const pt = fromPatient ? DATA.patients.find(x => x.id === fromPatient) : null;
   $('#watch-back span').textContent = pt ? '岛上' : p.name;
   $('#watch-back').onclick = () => go(pt ? '' : 'place/' + p.id);
@@ -463,6 +618,7 @@ function renderWatch(id) {
   f.title = v.kidTitle; f.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture'; f.allowFullscreen = true;
   f.referrerPolicy = 'no-referrer-when-downgrade'; f.src = embedUrl(v);
   $('#player').innerHTML = ''; $('#player').appendChild(f);
+  paintTime();
   $('#watch-title').innerHTML = `${esc(v.kidTitle || v.title)}<span class="sub">${esc(p.name)} · ${esc(mins(v.duration))}</span>`;
   $('#watch-say').onclick = e => say(`t-${v.id}`, e.currentTarget);
   const strip = $('#watch-patient');
@@ -567,7 +723,8 @@ async function startRec() {
     if (r._discard) return;
     const blob = new Blob(recChunks, {type: r.mimeType || 'audio/webm'});
     if (blob.size < 800) { const t = $('#rec-time'); if (t) t.textContent = '好像没录到，再试一次'; return; }
-    await addWork({type: 'voice', blob, kind: recCtx.kind, label: recCtx.label, place: recCtx.place || ''});
+    try { await addWork({type: 'voice', blob, kind: recCtx.kind, label: recCtx.label, place: recCtx.place || ''}); }
+    catch { const t = $('#rec-time'); if (t) t.textContent = '没存上，再录一次试试'; return; }
     closeModal(); toast('录好啦，放进探索本了');
     if (current.view === 'book') renderBook();
   };
@@ -612,7 +769,26 @@ document.addEventListener('click', async e => {
 });
 
 // ---------- 给大人 ----------
+function askPin() {
+  const saved = store.get(PIN_KEY, null);
+  if (!saved) { const a = prompt('第一次用，请设一个 4 位数字的大人密码'); if (!/^\d{4}$/.test(a || '')) { if (a !== null) alert('要 4 位数字'); return false; } store.set(PIN_KEY, a); return true; }
+  const a = prompt('请输入大人密码'); if (a === null) return false; if (a !== saved) { alert('密码不对'); return false; } return true;
+}
+function paintTset() {
+  $('#t-s').textContent = tset.session; $('#t-r').textContent = tset.rest; $('#t-d').textContent = tset.weekday; $('#t-w').textContent = tset.weekend;
+  const s = tnow();
+  $('#t-today').textContent = `今天已经看了 ${Math.round(s.used / 60)} 分钟${s.bonus ? `（今天加过 ${Math.round(s.bonus / 60)} 分钟）` : ''}${s.restUntil ? `，正在休息，还剩 ${mmss((s.restUntil - Date.now()) / 1000)}` : ''}。`;
+}
+$('#t-edit').onclick = () => { if (!askPin()) return; $('#ti-s').value = tset.session; $('#ti-r').value = tset.rest; $('#ti-d').value = tset.weekday; $('#ti-w').value = tset.weekend; $('#t-form').hidden = false; };
+$('#t-save').onclick = () => {
+  const n = (sel, lo, hi) => Math.min(hi, Math.max(lo, Math.round(+$(sel).value || 0)));
+  Object.assign(tset, {session: n('#ti-s', 5, 60), rest: n('#ti-r', 0, 60), weekday: n('#ti-d', 0, 240), weekend: n('#ti-w', 0, 240)});
+  store.set(TSET_KEY, tset); $('#t-form').hidden = true; paintTset(); toast('改好了');
+};
+$('#t-bonus').onclick = () => { if (!askPin()) return; const s = tnow(); s.bonus = (s.bonus || 0) + 900; s.restUntil = 0; s.sess = 0; store.set(TIME_KEY, s); paintTset(); toast('今天多了 15 分钟'); };
+$('#t-unrest').onclick = () => { if (!askPin()) return; const s = tnow(); s.restUntil = 0; s.sess = 0; store.set(TIME_KEY, s); paintTset(); toast('休息结束'); };
 function renderGrownup() {
+  paintTset();
   const s = DATA.site || {};
   $('#g-curator').textContent = s.curator || '家长';
   $('#g-audience').textContent = s.audience || '小学';
