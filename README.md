@@ -26,6 +26,7 @@
 | `tools/build_data.py` | 上面三份 + B 站核实信息 → `data.js`；充电专属或付费视频会直接报错 |
 | `tools/make_audio.py` | 把孩子要听的文字生成语音到 `audio/`（edge-tts，小艺声音；文字没变的跳过） |
 | `assets/` | 岛图（竖版、横版）、各地点横幅、向导、宝箱、小病人、山海经逐集封面（AI 生成或视频截帧） |
+| `sw.js` | 本机副本清单（`tools/build_sw.py` 生成，别手改）：第一次打开后在后台把页面、图片、语音（约 5MB）存进设备，之后从本机读；更新时只下载指纹变了的文件，下次打开生效。本地 `.git/hooks/pre-commit` 会在每次提交前自动重算；换电脑维护要重新装这个钩子 |
 | `update.py` | 原 BiliPicks 维护脚本：检查失效视频 |
 | `docs/` | 界面方向图、Fable 5.2 的意见、各版截图 |
 
@@ -33,7 +34,8 @@
 
 1. 在 B 站核实视频免费可看（不是充电专属；番剧单集查 `pgc/player/web/playurl`，`is_preview=1` 的是大会员集，网页里只能试看 6 分钟，不放）。
 2. 单集视频改 `tools/picks.json`；分 P 合集或番剧单集改 `tools/extras.json`。`tools/kid.json` 的 `kidTitles` 加儿童标题；想做小病人就在 `patients` 加一条。
-3. `python3 tools/build_data.py tools/verified-20261115.json` → `python3 tools/make_audio.py` → 本地打开检查 → 提交推送 `main`，确认后 `git push origin main:live` 上线。
+3. 改完任何网页文件都要让 `sw.js` 跟着更新（提交钩子自动做；没有钩子就手动 `python3 tools/build_sw.py`），否则已经存过的设备会一直看旧版。
+4. `python3 tools/build_data.py tools/verified-20261115.json` → `python3 tools/make_audio.py` → 本地打开检查 → 提交推送 `main`，确认后 `git push origin main:live` 上线。
 
 `python3 update.py --check` 可以检查有没有视频失效。
 

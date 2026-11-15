@@ -990,6 +990,11 @@ $('#b-mine').onclick = e => {
   renderBoard(placeById[current.arg]); toast('删掉了');
 };
 
+// 在这台设备上存一份（sw.js）：之后打开直接从本机读，网页更新时只下载变了的文件
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch {} });
+}
+
 route();
 </script>
 </body>
