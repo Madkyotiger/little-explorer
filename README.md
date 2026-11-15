@@ -1,14 +1,17 @@
 # 小小探索岛
 
-家长手选的儿童科普视频小岛（B 站官方嵌入播放器）。岛上 6 个地方：动物医院、动物园、微观世界、恐龙谷、游泳湾、舞台。没有推荐算法，没有积分、打卡和上锁；游戏感来自世界和角色：
+家长手选的儿童科普视频小岛（B 站官方嵌入播放器）。岛上 8 个地方：动物医院、动物园、微观世界、恐龙谷、游泳湾、舞台、云上山海（山海经）、英语小剧场（英文动画），共 70 条视频。没有推荐算法，没有积分、打卡和上锁；游戏感来自世界和角色：
 
-- **小探险家**（扎马尾的小女孩）当向导；岛上的字都能点 🔊 听。
+- **小探险家**（扎马尾的小女孩）当向导；岛上的字都能点喇叭听。
 - **今天的小病人**：每天一只小动物来敲门问一个问题，视频就是答案；看完可以录一句话回给它。
 - **我想试试**：每个地方几张线下小卡，做到了拍照放进探索本。不做没关系，不能拿来换看视频。
-- **探索本**（宝箱）：照片、录音、“我想知道”的问题、喜欢的视频。全部只存在这台设备的浏览器里（照片和录音在 IndexedDB），不上传。
+- **探索本**（宝箱）：照片、录音、“我想知道”的问题、喜欢的视频。全部只存在这台设备的浏览器里（照片和录音以 ArrayBuffer 存在 IndexedDB `island-book-2`；iPad Safari 直接存 Blob 刷新后会读不回），不上传。
+- **观看时间**：按分钟算。默认每段 30 分钟、休息 10 分钟，周一到周五每天 30 分钟、周末每天 90 分钟；正在看的视频不半路打断。大人在“给大人看”里输 4 位密码可改时间、加 15 分钟、结束休息。计时只记在这台设备上（localStorage）。
+- **防跳到 B 站**：iPad／电脑用的桌面版播放器加了 `sandbox`（不给 allow-popups），点标题、头像、画面都弹不出 B 站；手机版播放器加 sandbox 会黑屏，所以手机上没加，仍会跳。视频快结束时网页用自己的“看完啦”盖住播放器，挡住播完后的推荐。
 - 看完回到地点自己再挑，不做上滑连播。
+- 首页两张岛图：竖屏和手机用 `island.webp`，横着拿的平板／电脑用 `island-wide.webp`；其他页面在 iPad 上自动放大。
 
-在线：https://madkyotiger.github.io/little-explorer/
+在线：https://madkyotiger.github.io/little-explorer/ （GitHub Pages 读 `live` 分支；`main` 是开发版，推 `main` 不会上线）
 
 ## 文件
 
@@ -16,19 +19,20 @@
 |---|---|
 | `index.html` | 整个网页（无构建、无依赖） |
 | `data.js` | 生成的数据：视频、地点、小病人、线下小卡、语音台词（单行 `const DATA = {...};`） |
-| `tools/picks.json` | 视频清单：BV 号、分类、建议年龄、给大人的推荐理由、家长提示、原作者 |
-| `tools/kid.json` | 孩子看到的内容：地点坐标和欢迎语、每条视频的儿童标题、小病人、线下小卡、向导台词 |
-| `tools/build_data.py` | `picks.json` + `kid.json` + B 站核实信息 → `data.js`；充电专属或付费视频会直接报错 |
+| `tools/picks.json` | 单集视频清单：BV 号、分类、建议年龄、给大人的推荐理由、家长提示、原作者 |
+| `tools/extras.json` | 分 P 合集的单集（`BV…-p3`）和番剧单集（`ep…`，用 `episodeId` 嵌入），字段直接是网页格式 |
+| `tools/kid.json` | 孩子看到的内容：地点坐标（竖版 x/y、横版 wx/wy）和欢迎语、儿童标题、小病人、线下小卡、向导台词 |
+| `tools/build_data.py` | 上面三份 + B 站核实信息 → `data.js`；充电专属或付费视频会直接报错 |
 | `tools/make_audio.py` | 把孩子要听的文字生成语音到 `audio/`（edge-tts，小艺声音；文字没变的跳过） |
-| `assets/` | 岛图、各地点横幅、向导、宝箱（AI 生成） |
+| `assets/` | 岛图（竖版、横版）、各地点横幅、向导、宝箱、小病人、山海经逐集封面（AI 生成或视频截帧） |
 | `update.py` | 原 BiliPicks 维护脚本：检查失效视频 |
-| `docs/` | 界面方向图和 Fable 5.2 的意见 |
+| `docs/` | 界面方向图、Fable 5.2 的意见、各版截图 |
 
 ## 加视频 / 加小病人
 
-1. 在 B 站核实视频免费可看（不是充电专属），把 BV 信息加进核实文件。
-2. 改 `tools/picks.json`（加一行）和 `tools/kid.json`（`kidTitles` 加儿童标题；想做小病人就在 `patients` 加一条）。
-3. `python3 tools/build_data.py <verified.json>` → `python3 tools/make_audio.py` → 本地打开检查 → 提交推送。
+1. 在 B 站核实视频免费可看（不是充电专属；番剧单集查 `pgc/player/web/playurl`，`is_preview=1` 的是大会员集，网页里只能试看 6 分钟，不放）。
+2. 单集视频改 `tools/picks.json`；分 P 合集或番剧单集改 `tools/extras.json`。`tools/kid.json` 的 `kidTitles` 加儿童标题；想做小病人就在 `patients` 加一条。
+3. `python3 tools/build_data.py tools/verified-20261115.json` → `python3 tools/make_audio.py` → 本地打开检查 → 提交推送 `main`，确认后 `git push origin main:live` 上线。
 
 `python3 update.py --check` 可以检查有没有视频失效。
 
