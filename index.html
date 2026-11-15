@@ -3,144 +3,211 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f6e9ff">
+<meta name="theme-color" content="#f7f1fb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="探索岛">
 <meta name="description" content="小小探索岛：家长手选的儿童科普视频，小动物、恐龙、细菌、游泳、跳舞。">
 <title>小小探索岛</title>
 <link rel="preload" as="image" href="assets/island.webp">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --pink:#ff8fb8; --pink-d:#e2578c; --lav:#b79cff; --lav-d:#7d5fe0; --mint:#7fdcc4;
-  --ink:#4a3a63; --muted:#8a7aa3;
-  --font:"PingFang SC","HarmonyOS Sans SC","MiSans","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",ui-rounded,system-ui,sans-serif;
-  --shadow:0 6px 20px rgba(125,95,224,.16);
+  --tint:#ff3b7f; --tint-15:rgba(255,59,127,.13);
+  --purple:#a259e6; --purple-15:rgba(162,89,230,.13);
+  --green:#2fbf71; --green-15:rgba(47,191,113,.14);
+  --label:#1d1d1f; --label2:rgba(60,60,67,.74); --label3:rgba(60,60,67,.36);
+  --sep:rgba(60,60,67,.14);
+  --bg:#f7f1fb; --surface:#fff; --fill:rgba(120,120,128,.12);
+  --glass:rgba(255,255,255,.62); --glass-line:rgba(255,255,255,.7);
+  --font:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans SC","MiSans","Microsoft YaHei",system-ui,sans-serif;
+  --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
 }
-html,body{margin:0;min-height:100%}
-body{font-family:var(--font);color:var(--ink);font-size:18px;line-height:1.5;
-  background:radial-gradient(circle at 20% 0%,#ffe3f0 0,transparent 45%),radial-gradient(circle at 90% 30%,#e3f4ff 0,transparent 45%),linear-gradient(#fbf3ff,#f1f8ff);
-  background-attachment:fixed}
+html,body{margin:0;min-height:100%;background:var(--bg)}
+h1,h2,b,p,.lead{text-wrap:balance}
+body{font-family:var(--font);color:var(--label);font-size:17px;line-height:1.45;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
 img{display:block;max-width:100%}
-.app{max-width:560px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:28px}
+svg{display:block}
+.app{max-width:600px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:calc(32px + var(--safe-b))}
 [hidden]{display:none!important}
+.ic{width:1.15em;height:1.15em;fill:currentColor;flex:none}
+
+/* ---------- 通用控件（iOS 风格） ---------- */
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);
+  box-shadow:inset 0 0 0 .5px var(--glass-line),0 1px 2px rgba(0,0,0,.06),0 8px 24px rgba(80,40,120,.12)}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:50px;padding:0 22px;border-radius:999px;font-weight:600;font-size:17px;letter-spacing:-.01em;transition:transform .12s,filter .12s;user-select:none}
+.pill:active{transform:scale(.97);filter:brightness(.94)}
+.pill.block{display:flex;width:100%}
+.pill.filled{background:var(--tint);color:#fff}
+.pill.filled.green{background:var(--green)}
+.pill.filled.purple{background:var(--purple)}
+.pill.tinted{background:var(--tint-15);color:var(--tint)}
+.pill.tinted.purple{background:var(--purple-15);color:var(--purple)}
+.pill.gray{background:var(--fill);color:var(--label)}
+.pill.on{background:var(--tint);color:#fff}
+.pill.sm{min-height:36px;padding:0 14px;font-size:15px}
+.circle{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:50%;flex:none;transition:transform .12s}
+.circle:active{transform:scale(.92)}
+.circle.tinted{background:var(--tint-15);color:var(--tint)}
+.circle.gray{background:var(--fill);color:var(--label2)}
+.circle.sm{width:32px;height:32px}
+.circle.playing{animation:pulse .9s infinite}
+@keyframes pulse{50%{transform:scale(1.1)}}
+.navbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;padding:calc(8px + var(--safe-t)) 10px 8px;
+  background:rgba(247,241,251,.78);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);border-bottom:.5px solid var(--sep)}
+.nav-back{display:inline-flex;align-items:center;gap:2px;color:var(--tint);font-size:17px;font-weight:500;padding:6px 8px 6px 2px}
+.nav-back .ic{width:22px;height:22px}
+.float-back{position:absolute;left:12px;top:calc(12px + var(--safe-t));z-index:5;display:inline-flex;align-items:center;gap:2px;height:40px;padding:0 14px 0 8px;border-radius:999px;color:var(--label);font-weight:600;font-size:16px}
+.float-back .ic{width:20px;height:20px}
+.large-title{display:flex;align-items:center;gap:12px;padding:6px 20px 4px}
+.large-title h1{margin:0;font-size:32px;line-height:1.15;font-weight:700;letter-spacing:-.02em;flex:1}
+.section-h{margin:26px 20px 8px;font-size:20px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.inset{margin:0 16px;background:var(--surface);border-radius:20px;overflow:hidden}
+.cell{display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 16px;width:100%;text-align:left;position:relative;color:inherit;text-decoration:none}
+.cell+.cell::before{content:"";position:absolute;top:0;right:0;left:16px;border-top:.5px solid var(--sep)}
+.cell .t{flex:1;min-width:0}
+.cell .t b{display:block;font-weight:600}
+.cell .t span{display:block;font-size:14px;color:var(--label2)}
+.cell .chev{color:var(--label3);width:14px;height:14px}
+.cell:active{background:rgba(0,0,0,.04)}
+.footnote{font-size:13px;color:var(--label2);text-align:center;margin:18px 20px 0}
+.footnote a{color:var(--label2)}
 
 /* ---------- 岛 ---------- */
-.island-wrap{position:relative;width:100%;aspect-ratio:1086/1448;overflow:hidden;border-radius:0 0 28px 28px;box-shadow:var(--shadow)}
+.island-wrap{position:relative;width:100%;aspect-ratio:1086/1448;overflow:hidden}
 .island{width:100%;height:100%;object-fit:cover}
-.title{position:absolute;left:0;right:0;top:2.2%;margin:0;text-align:center;font-size:clamp(30px,8.5vw,46px);font-weight:900;letter-spacing:.06em;color:#fff;
-  text-shadow:0 2px 0 var(--pink-d),0 -2px 0 var(--pink-d),2px 0 0 var(--pink-d),-2px 0 0 var(--pink-d),0 5px 14px rgba(226,87,140,.45)}
-.spot{position:absolute;width:38%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%}
-.spot::before{content:"";position:absolute;inset:6%;border-radius:50%;border:3px solid transparent;transition:border-color .2s}
-.spot:active::before,.spot:focus-visible::before{border-color:rgba(255,255,255,.9)}
-.spot-label{position:absolute;left:50%;bottom:-2%;transform:translateX(-50%);white-space:nowrap;background:#fff;color:var(--lav-d);font-weight:800;font-size:clamp(15px,4.2vw,20px);
-  padding:3px 14px;border-radius:999px;box-shadow:0 3px 10px rgba(125,95,224,.3);border:2px solid #f3e8ff}
-.spot .sparkle{position:absolute;right:12%;top:10%;font-size:clamp(16px,4.5vw,22px);animation:twinkle 2.4s infinite ease-in-out}
-.spot:nth-of-type(2n) .sparkle{animation-delay:1.1s}
-@keyframes twinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
-.spot.visited .spot-label::after{content:" ⭐"}
+.island-wrap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16%;background:linear-gradient(transparent,var(--bg));pointer-events:none}
+.title{position:absolute;left:0;right:0;top:calc(2.4% + var(--safe-t));margin:0;text-align:center;font-size:clamp(30px,8.6vw,48px);font-weight:800;letter-spacing:.04em;color:#fff;
+  text-shadow:0 1px 2px rgba(150,60,140,.35),0 6px 22px rgba(190,80,170,.45)}
+.spot{position:absolute;width:38%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;z-index:2}
+.spot-label{position:absolute;left:50%;bottom:-1%;transform:translateX(-50%);white-space:nowrap;display:inline-flex;align-items:center;gap:4px;
+  height:34px;padding:0 14px;border-radius:999px;font-weight:700;font-size:clamp(15px,4.1vw,18px);color:var(--label);transition:transform .15s}
+.spot:active .spot-label{transform:translateX(-50%) scale(.94)}
+.spot .star{color:#ffb800;width:14px;height:14px}
+.spot .sparkle{position:absolute;right:14%;top:12%;width:18px;height:18px;color:#fff;filter:drop-shadow(0 0 6px rgba(255,255,255,.9));animation:twinkle 2.6s infinite ease-in-out}
+.spot:nth-of-type(2n) .sparkle{animation-delay:1.2s}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.1)}}
 
-.dock{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:-70px 12px 0;position:relative;z-index:2}
-.guide{display:flex;align-items:flex-end;gap:8px;text-align:left;flex:1;min-width:0}
-.guide img{width:124px;height:124px;border-radius:50%;border:4px solid #fff;box-shadow:var(--shadow);flex:none;background:#fde7f3}
-.bubble{position:relative;background:#fff;border-radius:20px;padding:10px 14px;font-weight:800;font-size:18px;box-shadow:var(--shadow);margin-bottom:10px;border:2px solid #fde2ef}
-.bubble::before{content:"";position:absolute;left:-9px;bottom:16px;border:9px solid transparent;border-right-color:#fff;border-left:0}
-.bubble.ring{animation:ring 1.6s infinite}
-@keyframes ring{0%,100%{transform:rotate(0)}6%{transform:rotate(-3deg)}12%{transform:rotate(3deg)}18%{transform:rotate(0)}}
-.chest{display:flex;flex-direction:column;align-items:center;flex:none;margin-bottom:4px}
-.chest img{width:88px;filter:drop-shadow(0 6px 10px rgba(125,95,224,.25))}
-.chest span{font-weight:800;color:var(--lav-d);font-size:15px;background:#fff;border-radius:999px;padding:1px 10px;margin-top:-6px;box-shadow:0 2px 8px rgba(125,95,224,.2)}
-.home-foot{text-align:center;margin-top:28px}
-.bubble .bi{font-size:30px;vertical-align:-6px;margin-right:4px}
-.grown-link{font-size:13px;color:var(--muted);text-decoration:underline;padding:8px}
-
-/* ---------- 通用 ---------- */
-.topbar{display:flex;align-items:center;gap:10px;padding:12px 14px}
-.back{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:8px 16px;font-weight:800;color:var(--lav-d);box-shadow:var(--shadow);font-size:16px}
-.say{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:var(--shadow);font-size:20px;flex:none;cursor:pointer}
-.say.small{width:34px;height:34px;font-size:16px}
-.say.playing{animation:pulse .8s infinite}
-@keyframes pulse{50%{transform:scale(1.12)}}
-.big-btn{display:flex;align-items:center;justify-content:center;gap:8px;border-radius:22px;padding:14px 18px;font-weight:900;font-size:19px;box-shadow:var(--shadow);background:#fff;color:var(--lav-d);border:3px solid #efe3ff;width:100%}
-.big-btn.pink{background:linear-gradient(135deg,#ff9cc2,#ff7aab);color:#fff;border-color:transparent}
-.big-btn.lav{background:linear-gradient(135deg,#c3a8ff,#9d7cff);color:#fff;border-color:transparent}
-.big-btn.mint{background:linear-gradient(135deg,#8ee6cf,#5fcfb2);color:#fff;border-color:transparent}
-.big-btn.like{color:var(--pink-d);border-color:#ffc6dc;background:#fff7fb}
-.big-btn.on{background:linear-gradient(135deg,#ff9cc2,#ff6f9f);color:#fff;border-color:transparent}
-.row{display:flex;gap:12px}
-.row>*{flex:1}
+.notice{display:flex;align-items:center;gap:12px;margin:-46px 14px 0;position:relative;z-index:3;padding:12px;border-radius:26px;text-align:left;width:calc(100% - 28px);transition:transform .15s}
+.notice:active{transform:scale(.98)}
+.notice .av{width:54px;height:54px;border-radius:50%;object-fit:cover;flex:none;background:#fde7f3}
+.notice .tx{flex:1;min-width:0}
+.notice .tx .top{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--label2)}
+.notice .tx .top b{color:var(--label);font-weight:600;font-size:14px}
+.notice .tx .top i{margin-left:auto;font-style:normal}
+.notice .tx p{margin:2px 0 0;font-weight:500;font-size:17px;line-height:1.3}
+.notice .pt{width:62px;height:62px;flex:none;animation:bob 2.2s infinite ease-in-out}
+.notice.done .pt{animation:none}
+@keyframes bob{50%{transform:translateY(-4px) rotate(-3deg)}}
+.home-list{margin-top:16px}
+.home-list .cell img{width:40px;height:40px;object-fit:contain}
 
 /* ---------- 地点页 ---------- */
-.place-hero{position:relative;margin:0 14px;border-radius:26px;overflow:hidden;aspect-ratio:2/1;box-shadow:var(--shadow);background:#f4eaff}
-.place-hero img{width:100%;height:100%;object-fit:cover}
-.place-hero h1{position:absolute;left:14px;bottom:10px;margin:0;font-size:30px;font-weight:900;color:#fff;text-shadow:0 2px 0 var(--lav-d),0 -2px 0 var(--lav-d),2px 0 0 var(--lav-d),-2px 0 0 var(--lav-d)}
-.place-hero .say{position:absolute;right:12px;bottom:12px}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:16px 14px 6px}
-.vcard{background:#fff;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);text-align:left;display:flex;flex-direction:column;position:relative;border:2px solid #f6eeff}
-.vcard .cv{position:relative;aspect-ratio:16/9;background:#f4eaff;display:block}
-.vcard .cv img{width:100%;height:100%;object-fit:cover}
-.vcard .min{position:absolute;right:8px;bottom:8px;background:rgba(74,58,99,.72);color:#fff;font-size:13px;border-radius:999px;padding:1px 8px;font-weight:700}
-.vcard .heart{position:absolute;left:8px;top:8px;font-size:20px}
-.vcard .vt{display:flex;align-items:flex-start;gap:6px;padding:9px 10px 11px;font-weight:800;font-size:16px;line-height:1.35}
-.vcard .vt>span:first-child{flex:1}
-.try-wrap{padding:10px 14px}
+.hero{position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;background:#efe4f7}
+.hero img{width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:42%;background:linear-gradient(transparent,var(--bg));pointer-events:none}
+.place-head{margin-top:-30px;position:relative;z-index:2}
+.place-head p{margin:0 20px;color:var(--label2);font-size:16px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:20px 14px;padding:18px 16px 4px}
+.tile{text-align:left;display:flex;flex-direction:column;gap:7px;transition:transform .15s}
+.tile:active{transform:scale(.97)}
+.tile .cv{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#ece2f5;box-shadow:0 1px 2px rgba(0,0,0,.06),0 6px 16px rgba(80,40,120,.10)}
+.tile .cv img{width:100%;height:100%;object-fit:cover}
+.tile .heart{position:absolute;left:7px;top:7px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:var(--tint)}
+.tile .heart .ic{width:15px;height:15px}
+.tile .cv .say-on{position:absolute;right:7px;bottom:7px;width:34px;height:34px;color:var(--tint)}
+.tile .cv .say-on .ic{width:17px;height:17px}
+.tile .meta{display:flex;align-items:flex-start;gap:8px}
+.tile .meta .t{flex:1;min-width:0}
+.tile .meta b{display:block;font-weight:500;font-size:16px;line-height:1.3;letter-spacing:-.01em}
+.tile .meta .t>span{display:block;font-size:13px;color:var(--label2);margin-top:2px}
+.bottom-cta{padding:22px 16px 0}
 
 /* ---------- 播放页 ---------- */
-.player{margin:0 14px;border-radius:22px;overflow:hidden;box-shadow:var(--shadow);background:#2a2140;aspect-ratio:16/9;position:relative}
+.player{width:100%;aspect-ratio:16/9;background:#1b1626;position:relative}
 .player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.watch-title{display:flex;align-items:center;gap:10px;margin:16px 14px 12px}
-.watch-title h1{margin:0;font-size:23px;font-weight:900;line-height:1.3;flex:1}
-.watch-actions{display:grid;gap:12px;padding:0 14px}
-.patient-strip{display:flex;align-items:center;gap:10px;background:#fff6fb;border:2px dashed #ffc2db;border-radius:20px;padding:10px 12px;margin:0 14px 12px;font-weight:700;font-size:16px}
-.patient-strip .pi{font-size:34px}
-details.grown{margin:20px 14px 0;background:rgba(255,255,255,.7);border-radius:16px;padding:10px 14px;font-size:14px;color:var(--muted)}
-details.grown summary{cursor:pointer;font-weight:700}
-details.grown p{margin:8px 0}
-details.grown a{color:var(--lav-d)}
-.caution{color:#a35b00}
+@media (min-width:601px){.player{border-radius:18px;overflow:hidden;margin-top:12px}}
+.waiting{display:flex;align-items:center;gap:12px;margin:14px 16px 0;padding:10px 14px;border-radius:20px;background:#fff}
+.waiting img{width:52px;height:52px;flex:none}
+.waiting p{margin:0;font-size:15px;color:var(--label2);line-height:1.4}
+.waiting p b{color:var(--label);font-weight:600}
+.watch-title{display:flex;align-items:flex-start;gap:12px;padding:16px 20px 6px}
+.watch-title h1{margin:0;font-size:26px;line-height:1.25;font-weight:700;letter-spacing:-.02em;flex:1}
+.watch-title .sub{display:block;font-size:15px;font-weight:500;color:var(--label2);margin-top:4px;letter-spacing:0}
+.actions{display:grid;gap:12px;padding:12px 16px 0}
+.row{display:flex;gap:12px}
+.row>*{flex:1}
+.grown-h{margin:30px 20px 8px;font-size:15px;color:var(--label2);font-weight:500}
+.grown-sec .cell .t b{font-size:15px}
+.caution{color:#c26a00}
 
-/* ---------- 弹窗 ---------- */
-.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:18px;background:rgba(74,58,99,.38);backdrop-filter:blur(3px)}
-.sheet{width:100%;max-width:440px;background:#fff;border-radius:30px;padding:22px 18px 18px;box-shadow:0 20px 50px rgba(74,58,99,.35);text-align:center;position:relative;animation:pop .28s ease-out}
-@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
-.sheet .x{position:absolute;right:12px;top:10px;font-size:22px;color:var(--muted);width:40px;height:40px}
-.sheet .who-icon{font-size:76px;line-height:1;margin:4px 0 6px;display:inline-block;animation:bob 2s infinite ease-in-out}
-@keyframes bob{50%{transform:translateY(-6px)}}
-.sheet h2{margin:2px 0 8px;font-size:22px}
-.sheet .say-text{font-size:20px;font-weight:700;background:#fff6fb;border-radius:20px;padding:12px 14px;margin:6px 0 14px;line-height:1.5}
+/* ---------- 底部弹层（iOS sheet） ---------- */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(20,10,30,.28);display:flex;align-items:flex-end;justify-content:center;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.sheet{width:100%;max-width:600px;background:var(--surface);border-radius:30px 30px 0 0;padding:8px 20px calc(22px + var(--safe-b));text-align:center;position:relative;animation:up .32s cubic-bezier(.2,.9,.3,1.05)}
+@media (min-width:601px){.modal{align-items:center}.sheet{border-radius:30px;max-width:460px;padding-bottom:22px}}
+@keyframes up{from{transform:translateY(100%)}}
+.grabber{width:36px;height:5px;border-radius:3px;background:rgba(60,60,67,.22);margin:0 auto 6px}
+.sheet .x{position:absolute;right:14px;top:12px;z-index:2}
+.sheet .grabber+.x+*{margin-top:34px}
+.sheet .hero-pt{width:150px;height:150px;margin-left:auto;margin-right:auto;animation:bob 2.2s infinite ease-in-out}
+.sheet h2{margin:6px 0 4px;font-size:24px;font-weight:700;letter-spacing:-.02em}
+.sheet .lead{font-size:19px;font-weight:500;line-height:1.5;margin:6px 4px 18px;color:var(--label)}
 .sheet .stack{display:grid;gap:10px}
-.sheet .note{font-size:14px;color:var(--muted);margin-top:10px}
-.try-card{font-size:21px;font-weight:800;line-height:1.5;background:linear-gradient(135deg,#fff3c9,#ffe2f0);border-radius:22px;padding:18px 16px;margin:6px 0 14px}
-.rec{width:120px;height:120px;border-radius:50%;font-size:52px;background:linear-gradient(135deg,#ff9cc2,#ff6f9f);color:#fff;box-shadow:var(--shadow);margin:6px auto 8px;display:grid;place-items:center}
-.rec.on{animation:pulse 1s infinite;background:linear-gradient(135deg,#ff6f6f,#ff3f7f)}
-.rec-time{font-weight:800;color:var(--pink-d);min-height:1.5em}
+.sheet .note{font-size:14px;color:var(--label2);margin:14px 0 0}
+.try-art{width:100%;aspect-ratio:2/1;object-fit:cover;border-radius:20px;margin-bottom:4px;background:#efe4f7}
+.rec{width:110px;height:110px;border-radius:50%;background:var(--tint);color:#fff;display:grid;place-items:center;margin:10px auto 10px;box-shadow:0 10px 30px rgba(255,59,127,.35);transition:transform .12s}
+.rec .ic{width:46px;height:46px}
+.rec:active{transform:scale(.95)}
+.rec.on{animation:pulse 1s infinite;background:#ff3b30;box-shadow:0 10px 30px rgba(255,59,48,.4)}
+.rec-time{font-weight:600;color:var(--label2);min-height:1.5em;font-variant-numeric:tabular-nums}
 
 /* ---------- 探索本 ---------- */
-.book-head{display:flex;align-items:center;gap:12px;margin:0 14px 8px;background:#fff;border-radius:26px;padding:12px 14px;box-shadow:var(--shadow)}
-.book-head img{width:72px}
-.book-head h1{margin:0;font-size:26px;flex:1}
-.sec-t{margin:22px 16px 10px;font-size:20px;font-weight:900;display:flex;align-items:center;gap:8px}
-.works{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 14px}
-.work{background:#fff;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);text-align:left;position:relative}
-.work img{width:100%;aspect-ratio:1;object-fit:cover;background:#f4eaff}
-.work .voice{width:100%;aspect-ratio:1;display:grid;place-items:center;font-size:54px;background:linear-gradient(135deg,#ffe2f0,#ece2ff)}
-.work .wt{padding:8px 10px 10px;font-size:13px;line-height:1.4}
-.work .wt b{display:block;font-size:14px;margin-bottom:2px}
-.work .del{position:absolute;right:6px;top:6px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.85);font-size:14px}
-.empty{margin:0 16px 4px;padding:16px;border-radius:18px;background:rgba(255,255,255,.7);color:var(--muted);font-size:16px;text-align:center}
-.wonder-wrap{padding:0 14px}
+.book-top{display:flex;align-items:center;gap:14px;padding:10px 20px 0}
+.book-top img{width:64px;height:64px;object-fit:contain}
+.book-top h1{margin:0;font-size:32px;font-weight:700;letter-spacing:-.02em;flex:1}
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:0 16px;border-radius:20px;overflow:hidden}
+.photos .ph{position:relative;aspect-ratio:1;background:#ece2f5}
+.photos .ph img{width:100%;height:100%;object-fit:cover}
+.photos .ph .cap{position:absolute;left:0;right:0;bottom:0;padding:16px 8px 6px;font-size:11px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.45));line-height:1.3}
+.photos .ph .del{position:absolute;right:5px;top:5px;width:26px;height:26px;color:#fff;background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.photos .ph .del .ic{width:12px;height:12px}
+.empty{margin:0 16px;padding:22px 18px;border-radius:20px;background:var(--surface);color:var(--label2);font-size:16px;text-align:center;line-height:1.5}
+.voice-cell .play{color:#fff;background:var(--tint)}
+.voice-cell .del{color:var(--label3)}
 
 /* ---------- 给大人 ---------- */
-.prose{background:#fff;margin:0 14px;border-radius:24px;padding:18px 18px 8px;box-shadow:var(--shadow);font-size:16px;line-height:1.75}
-.prose h1{font-size:24px;margin:0 0 8px}
-.prose h2{font-size:18px;margin:18px 0 4px}
+.prose{background:var(--surface);margin:8px 16px 0;border-radius:20px;padding:18px 18px 8px;font-size:16px;line-height:1.75}
+.prose h1{font-size:28px;margin:0 0 8px;letter-spacing:-.02em}
+.prose h2{font-size:18px;margin:20px 0 4px}
 .prose ul{padding-left:20px}
-.prose a{color:var(--lav-d)}
-.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:700;font-size:16px;transition:.25s;z-index:80;pointer-events:none;max-width:90vw;text-align:center}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.prose a{color:var(--tint)}
+
+.toast{position:fixed;left:50%;top:calc(12px + var(--safe-t));transform:translate(-50%,-140%);display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;font-weight:600;font-size:15px;z-index:80;pointer-events:none;transition:transform .35s cubic-bezier(.2,.9,.3,1.1);max-width:90vw;color:var(--label)}
+.toast.show{transform:translate(-50%,0)}
+.toast .ic{color:var(--tint)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15.4 4.6a1.2 1.2 0 0 1 0 1.7L9.7 12l5.7 5.7a1.2 1.2 0 1 1-1.7 1.7l-6.5-6.5a1.2 1.2 0 0 1 0-1.8l6.5-6.5a1.2 1.2 0 0 1 1.7 0z"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M8.6 4.6a1.2 1.2 0 0 1 1.7 0l6.5 6.5a1.2 1.2 0 0 1 0 1.8l-6.5 6.5a1.2 1.2 0 1 1-1.7-1.7l5.7-5.7-5.7-5.7a1.2 1.2 0 0 1 0-1.7z"/></symbol>
+  <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M11.3 4.3a.9.9 0 0 1 1.5.7v14a.9.9 0 0 1-1.5.7L7 16H4.5A1.5 1.5 0 0 1 3 14.5v-5A1.5 1.5 0 0 1 4.5 8H7l4.3-3.7zM15.6 8.4a1 1 0 0 1 1.4.1 5.4 5.4 0 0 1 0 7 1 1 0 1 1-1.5-1.3 3.4 3.4 0 0 0 0-4.4 1 1 0 0 1 .1-1.4zm2.7-2.6a1 1 0 0 1 1.4 0 9.2 9.2 0 0 1 0 12.4 1 1 0 0 1-1.5-1.3 7.2 7.2 0 0 0 0-9.8 1 1 0 0 1 .1-1.3z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.6c-.3 0-.6-.1-.8-.3C6.3 16.2 2.7 13 2.7 8.9 2.7 6 5 3.6 7.9 3.6c1.7 0 3.2.8 4.1 2.1.9-1.3 2.4-2.1 4.1-2.1 2.9 0 5.2 2.4 5.2 5.3 0 4.1-3.6 7.3-8.5 11.4-.2.2-.5.3-.8.3zM7.9 5.6c-1.8 0-3.2 1.5-3.2 3.3 0 3 2.9 5.7 7.3 9.4 4.4-3.7 7.3-6.4 7.3-9.4 0-1.8-1.4-3.3-3.2-3.3-1.4 0-2.5.8-3.1 2.1a1.1 1.1 0 0 1-2 0c-.6-1.3-1.7-2.1-3.1-2.1z"/></symbol>
+  <symbol id="i-heart-f" viewBox="0 0 24 24"><path d="M12 20.6c-.3 0-.6-.1-.8-.3C6.3 16.2 2.7 13 2.7 8.9 2.7 6 5 3.6 7.9 3.6c1.7 0 3.2.8 4.1 2.1.9-1.3 2.4-2.1 4.1-2.1 2.9 0 5.2 2.4 5.2 5.3 0 4.1-3.6 7.3-8.5 11.4-.2.2-.5.3-.8.3z"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M10 2.5c.4 0 .7.3.8.6l1 3.6c.4 1.4 1.5 2.5 2.9 2.9l3.6 1c.4.1.6.4.6.8s-.2.7-.6.8l-3.6 1c-1.4.4-2.5 1.5-2.9 2.9l-1 3.6c-.1.4-.4.6-.8.6s-.7-.2-.8-.6l-1-3.6c-.4-1.4-1.5-2.5-2.9-2.9l-3.6-1a.8.8 0 0 1 0-1.6l3.6-1c1.4-.4 2.5-1.5 2.9-2.9l1-3.6c.1-.3.4-.6.8-.6zm8.5 12.8c.3 0 .5.2.6.4l.4 1.3c.2.6.6 1 1.2 1.2l1.3.4a.6.6 0 0 1 0 1.2l-1.3.4c-.6.2-1 .6-1.2 1.2l-.4 1.3a.6.6 0 0 1-1.2 0l-.4-1.3c-.2-.6-.6-1-1.2-1.2l-1.3-.4a.6.6 0 0 1 0-1.2l1.3-.4c.6-.2 1-.6 1.2-1.2l.4-1.3c.1-.2.3-.4.6-.4z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6.3 6.3a1.1 1.1 0 0 1 1.6 0L12 10.4l4.1-4.1a1.1 1.1 0 1 1 1.6 1.6L13.6 12l4.1 4.1a1.1 1.1 0 1 1-1.6 1.6L12 13.6l-4.1 4.1a1.1 1.1 0 1 1-1.6-1.6l4.1-4.1-4.1-4.1a1.1 1.1 0 0 1 0-1.6z"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 2.5a3.5 3.5 0 0 1 3.5 3.5v6a3.5 3.5 0 0 1-7 0V6A3.5 3.5 0 0 1 12 2.5zM6 11a1 1 0 0 1 1 1 5 5 0 0 0 10 0 1 1 0 1 1 2 0 7 7 0 0 1-6 6.9V21a1 1 0 1 1-2 0v-2.1A7 7 0 0 1 5 12a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="3"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M9.2 3.5h5.6c.6 0 1.1.3 1.4.8l1 1.7H19a2.5 2.5 0 0 1 2.5 2.5v9A2.5 2.5 0 0 1 19 20H5a2.5 2.5 0 0 1-2.5-2.5v-9A2.5 2.5 0 0 1 5 6h1.8l1-1.7c.3-.5.8-.8 1.4-.8zM12 8.5a4.3 4.3 0 1 0 0 8.6 4.3 4.3 0 0 0 0-8.6zm0 2a2.3 2.3 0 1 1 0 4.6 2.3 2.3 0 0 1 0-4.6z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.2c0-.8.9-1.3 1.6-.9l9.5 6c.6.4.6 1.3 0 1.7l-9.5 6c-.7.4-1.6-.1-1.6-.9V5.2z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M19.7 6.3a1.1 1.1 0 0 1 0 1.6l-9.5 9.5a1.1 1.1 0 0 1-1.6 0l-4.3-4.3a1.1 1.1 0 1 1 1.6-1.6l3.5 3.5 8.7-8.7a1.1 1.1 0 0 1 1.6 0z"/></symbol>
+  <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M12 4a8 8 0 0 1 7.4 5H17a1 1 0 1 0 0 2h4.5a1 1 0 0 0 1-1V5.5a1 1 0 1 0-2 0v1.9A10 10 0 0 0 2.1 10.9a1 1 0 1 0 2 .3A8 8 0 0 1 12 4zm9.1 8.8a1 1 0 0 0-1.1.9A8 8 0 0 1 4.6 15H7a1 1 0 1 0 0-2H2.5a1 1 0 0 0-1 1v4.5a1 1 0 1 0 2 0v-1.9a10 10 0 0 0 18.4-2.7 1 1 0 0 0-.8-1.1z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M9.5 3h5a1.5 1.5 0 0 1 1.5 1.5V5h3.5a1 1 0 1 1 0 2h-.6l-.8 12.1A2.5 2.5 0 0 1 15.6 21H8.4a2.5 2.5 0 0 1-2.5-1.9L5.1 7h-.6a1 1 0 0 1 0-2H8v-.5A1.5 1.5 0 0 1 9.5 3zM7.1 7l.8 11.9c0 .3.3.6.5.6h7.2c.3 0 .5-.3.5-.6L16.9 7H7.1z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 2.8z"/></symbol>
+</svg>
+
 <div class="app">
 
   <section id="v-home">
@@ -148,54 +215,52 @@ details.grown a{color:var(--lav-d)}
       <img class="island" src="assets/island.webp" alt="">
       <h1 class="title">小小探索岛</h1>
     </div>
-    <div class="dock">
-      <button type="button" class="guide" id="guide-btn" aria-label="今天的小病人">
-        <img src="assets/guide.webp" alt="">
-        <span class="bubble" id="guide-bubble"></span>
-      </button>
-      <button type="button" class="chest" id="chest-btn" aria-label="我的探索本">
-        <img src="assets/chest.webp" alt=""><span>探索本</span>
-      </button>
+    <button type="button" class="notice glass" id="notice"></button>
+    <div class="inset home-list">
+      <button type="button" class="cell" id="book-cell"><img src="assets/chest.webp" alt=""><span class="t"><b>我的探索本</b><span>照片、问题和喜欢的视频</span></span><svg class="ic chev"><use href="#i-chev"/></svg></button>
     </div>
-    <div class="home-foot"><a class="grown-link" href="#grownup">给大人看</a></div>
+    <p class="footnote"><a href="#grownup">给大人看</a></p>
   </section>
 
   <section id="v-place" hidden>
-    <div class="topbar"><button type="button" class="back" data-go="">🏝️ 回岛上</button></div>
-    <div class="place-hero"><img id="place-img" alt=""><h1 id="place-name"></h1><button type="button" class="say" id="place-say" aria-label="听一听">🔊</button></div>
-    <div class="cards" id="place-cards"></div>
-    <div class="try-wrap"><button type="button" class="big-btn mint" id="place-try">✨ 我想试试</button></div>
+    <div class="hero"><img id="place-img" alt=""><button type="button" class="float-back glass" data-go=""><svg class="ic"><use href="#i-back"/></svg>岛上</button></div>
+    <div class="place-head">
+      <div class="large-title"><h1 id="place-name"></h1><button type="button" class="circle tinted" id="place-say" aria-label="听一听"><svg class="ic"><use href="#i-speaker"/></svg></button></div>
+      <p id="place-count"></p>
+    </div>
+    <div class="tiles" id="place-tiles"></div>
+    <div class="bottom-cta"><button type="button" class="pill block tinted purple" id="place-try"><svg class="ic"><use href="#i-spark"/></svg>我想试试</button></div>
   </section>
 
   <section id="v-watch" hidden>
-    <div class="topbar"><button type="button" class="back" id="watch-back"></button></div>
-    <div class="patient-strip" id="watch-patient" hidden></div>
+    <div class="navbar"><button type="button" class="nav-back" id="watch-back"><svg class="ic"><use href="#i-back"/></svg><span></span></button></div>
     <div class="player" id="player"></div>
-    <div class="watch-title"><h1 id="watch-title"></h1><button type="button" class="say" id="watch-say" aria-label="听一听">🔊</button></div>
-    <div class="watch-actions">
-      <button type="button" class="big-btn mint" id="helped-btn" hidden>✅ 我帮到它啦！</button>
+    <div class="waiting" id="watch-patient" hidden></div>
+    <div class="watch-title"><h1 id="watch-title"></h1><button type="button" class="circle tinted" id="watch-say" aria-label="听一听"><svg class="ic"><use href="#i-speaker"/></svg></button></div>
+    <div class="actions">
+      <button type="button" class="pill block filled green" id="helped-btn" hidden><svg class="ic"><use href="#i-check"/></svg>我帮到它啦</button>
       <div class="row">
-        <button type="button" class="big-btn like" id="like-btn"></button>
-        <button type="button" class="big-btn lav" id="watch-try">✨ 我想试试</button>
+        <button type="button" class="pill tinted" id="like-btn"></button>
+        <button type="button" class="pill tinted purple" id="watch-try"><svg class="ic"><use href="#i-spark"/></svg>我想试试</button>
       </div>
     </div>
-    <details class="grown" id="watch-grown"></details>
+    <div class="grown-h">给大人看</div>
+    <div class="inset grown-sec" id="watch-grown"></div>
   </section>
 
   <section id="v-book" hidden>
-    <div class="topbar"><button type="button" class="back" data-go="">🏝️ 回岛上</button></div>
-    <div class="book-head"><img src="assets/chest.webp" alt=""><h1>我的探索本</h1><button type="button" class="say" id="book-say" aria-label="听一听">🔊</button></div>
-    <div class="sec-t">📸 我做过的事</div>
-    <div id="book-works-box"></div>
-    <div class="sec-t">💭 我想知道</div>
-    <div class="wonder-wrap"><button type="button" class="big-btn pink" id="wonder-btn">🎤 我有一个问题</button></div>
-    <div class="works" id="book-wonders" style="margin-top:12px"></div>
-    <div class="sec-t">💗 我喜欢的视频</div>
-    <div class="cards" id="book-likes" style="padding-top:0"></div>
+    <div class="navbar"><button type="button" class="nav-back" data-go=""><svg class="ic"><use href="#i-back"/></svg><span>岛上</span></button></div>
+    <div class="book-top"><img src="assets/chest.webp" alt=""><h1>探索本</h1><button type="button" class="circle tinted" id="book-say" aria-label="听一听"><svg class="ic"><use href="#i-speaker"/></svg></button></div>
+    <div class="section-h">我做过的事</div>
+    <div id="book-photos"></div>
+    <div class="section-h">我想知道</div>
+    <div class="inset" id="book-wonders"></div>
+    <div class="section-h">我喜欢的视频</div>
+    <div id="book-likes"></div>
   </section>
 
   <section id="v-grownup" hidden>
-    <div class="topbar"><button type="button" class="back" data-go="">🏝️ 回岛上</button></div>
+    <div class="navbar"><button type="button" class="nav-back" data-go=""><svg class="ic"><use href="#i-back"/></svg><span>岛上</span></button></div>
     <div class="prose">
       <h1>写给大人</h1>
       <p>这是<strong id="g-curator">爸爸</strong>给<strong id="g-audience">7 岁</strong>孩子挑的视频小岛。按她自己说过喜欢的方向分成 6 个地方：动物医院、动物园、微观世界（细菌和病毒）、恐龙谷、游泳湾、舞台。没有推荐算法，没有积分、打卡和上锁。</p>
@@ -204,7 +269,7 @@ details.grown a{color:var(--lav-d)}
         <li><strong>今天的小病人</strong>：每天有一只小动物来敲门，问一个问题，视频就是答案。一天一个，不看也没有损失。</li>
         <li><strong>我想试试</strong>：每个地方有几张线下小卡（给毛绒玩具做体检、捏一个细菌、学一个八拍……）。做了可以拍照放进探索本，不做也没关系。<strong>不要催，也不要拿来交换看视频。</strong></li>
         <li><strong>探索本</strong>：她拍的照片、录的话、“我想知道”的问题、喜欢的视频。照片和录音只存在这台设备的浏览器里，不上传；换设备不同步，清除浏览数据会丢。</li>
-        <li>岛上的字都能点 🔊 听，她认的字不多也能自己用。</li>
+        <li>岛上的字都能点喇叭听，她认的字不多也能自己用。</li>
       </ul>
       <h2>大人看什么</h2>
       <p>隔一两周翻一下探索本：她问了什么、做了什么、反复回去看什么、会不会讲给你听。这些比看了多少条更能说明兴趣。“我想知道”里的问题，是下一批加视频最好的线索。别因为她喜欢某样就马上加码报班，她很快会学会不点。</p>
@@ -212,13 +277,13 @@ details.grown a{color:var(--lav-d)}
       <p>每条都用 B 站公开接口核过：真实存在、免费可看（不收充电专属和付费课），优先官方机构和原作者的号。转载的在播放页“给大人看”里写明。不是逐条从头看完的白名单，舞蹈视频只看过封面，最好先看一眼。B 站播放器播完有时会显示别的视频，这一点网页控制不了；“去 B 站看高清”会进 B 站自己的推荐。</p>
       <h2>所有视频</h2>
       <div id="g-list"></div>
-      <p style="font-size:13px;color:#8a7aa3;margin-top:16px">视频清单的维护方式参考开源项目 <a href="https://github.com/limin112/bilipicks" target="_blank" rel="noopener noreferrer">BiliPicks</a>（MIT，MinLiBuilds）。本站不是 B 站官方产品，视频版权归各 UP 主所有。<span id="g-built"></span></p>
+      <p style="font-size:13px;color:var(--label2);margin-top:16px">视频清单的维护方式参考开源项目 <a href="https://github.com/limin112/bilipicks" target="_blank" rel="noopener noreferrer">BiliPicks</a>（MIT，MinLiBuilds）。本站不是 B 站官方产品，视频版权归各 UP 主所有。<span id="g-built"></span></p>
     </div>
   </section>
 </div>
 
 <div class="modal" id="modal" hidden><div class="sheet" id="sheet" role="dialog"></div></div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="toast glass" id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="photo-input" accept="image/*" capture="environment" hidden>
 
 <script src="data.js"></script>
@@ -226,6 +291,7 @@ details.grown a{color:var(--lav-d)}
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ic = (id, cls = '') => `<svg class="ic ${cls}"><use href="#i-${id}"/></svg>`;
 const store = {
   get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
@@ -237,6 +303,7 @@ const placeByCat = Object.fromEntries(PLACES.map(p => [p.cat, p]));
 const placeById = Object.fromEntries(PLACES.map(p => [p.id, p]));
 const placeOf = v => placeByCat[v.category];
 const mins = s => s ? `${Math.max(1, Math.round(s / 60))} 分钟` : '';
+const ptImg = pt => `assets/pt-${pt.id}.webp`;
 
 // ---------- 本机记录 ----------
 const LIKE_KEY = 'picks-like-v1', VISIT_KEY = 'island-visited-v1', HELP_KEY = 'island-helped-v1';
@@ -267,7 +334,7 @@ audio.addEventListener('ended', () => {
 function hush() { queued = null; try { audio.pause(); } catch {} if (sayingBtn) sayingBtn.classList.remove('playing'); sayingBtn = null; }
 
 let toastT;
-function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2400); }
+function toast(msg, icon = 'check') { const t = $('#toast'); t.innerHTML = `${ic(icon)}<span>${esc(msg)}</span>`; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200); }
 
 // ---------- 探索本存储（IndexedDB，只在本机） ----------
 let dbp;
@@ -285,7 +352,7 @@ async function delWork(id) { const d = await db(); return new Promise(res => { c
 
 // ---------- 页面切换 ----------
 let current = {view: 'home'};
-let fromPatient = null, pendingSay = null;
+let fromPatient = null, keepVoice = false;
 function route() {
   const [view, arg] = location.hash.slice(1).split('/');
   closeModal();
@@ -299,10 +366,11 @@ function route() {
   if (view !== 'watch') fromPatient = null;
   $(`#v-${current.view}`).hidden = false;
   window.scrollTo(0, 0);
-  if (pendingSay) { const f = pendingSay; pendingSay = null; f(); } else hush();
+  if (keepVoice) keepVoice = false; else hush();
 }
-function go(hash, thenSay) {
-  pendingSay = thenSay || null;
+// 点击里先出声（iOS 只允许点击时开始播放），再跳页，跳页时不打断这段声音
+function go(hash, voiceStarted) {
+  keepVoice = !!voiceStarted;
   if (location.hash.slice(1) === hash) route(); else location.hash = hash;
 }
 window.addEventListener('hashchange', route);
@@ -314,31 +382,35 @@ function renderHome() {
   $$('.spot', wrap).forEach(s => s.remove());
   PLACES.forEach(p => {
     const b = document.createElement('button');
-    b.type = 'button'; b.className = 'spot' + (visited[p.id] ? ' visited' : '');
+    b.type = 'button'; b.className = 'spot';
     b.style.left = p.x + '%'; b.style.top = p.y + '%';
     b.setAttribute('aria-label', p.name);
-    b.innerHTML = `<span class="sparkle" aria-hidden="true">✨</span><span class="spot-label">${esc(p.name)}</span>`;
-    b.onclick = () => { visited[p.id] = 1; store.set(VISIT_KEY, visited); say(`place-${p.id}`); go('place/' + p.id, () => {}); };
+    b.innerHTML = `${ic('spark', 'sparkle')}<span class="spot-label glass">${esc(p.name)}${visited[p.id] ? ic('star', 'star') : ''}</span>`;
+    b.onclick = () => { visited[p.id] = 1; store.set(VISIT_KEY, visited); say(`place-${p.id}`); go('place/' + p.id, true); };
     wrap.appendChild(b);
   });
   const pt = todaysPatient(), done = helped[today()] === pt.id;
-  const bub = $('#guide-bubble');
-  bub.innerHTML = done ? `<span class="bi">${pt.icon}</span>今天帮了${esc(pt.who)}，明天还有新的小病人！` : `<span class="bi">${pt.icon}</span>叮咚！今天有小病人来敲门！`;
-  bub.classList.toggle('ring', !done);
+  const n = $('#notice');
+  n.classList.toggle('done', done);
+  n.innerHTML = `<img class="av" src="assets/guide.webp" alt="">
+    <span class="tx"><span class="top"><b>今天的小病人</b>${done ? '<i>已帮助</i>' : ''}</span>
+    <p>${done ? `今天帮了${esc(pt.who)}，明天还有新的小病人！` : `叮咚！${esc(pt.who)}来看病啦`}</p></span>
+    <img class="pt" src="${ptImg(pt)}" alt="">`;
 }
-$('#guide-btn').onclick = () => openPatient();
-$('#chest-btn').onclick = () => { say('line-chest'); go('book', () => {}); };
+$('#notice').onclick = () => openPatient();
+$('#book-cell').onclick = () => { say('line-chest'); go('book', true); };
 
 // ---------- 今天的小病人 ----------
 function openPatient() {
   const pt = todaysPatient(), done = helped[today()] === pt.id;
-  openModal(`<button type="button" class="x" data-close aria-label="关上">✕</button>
-    <div class="who-icon" aria-hidden="true">${pt.icon}</div>
+  openModal(`<div class="grabber"></div>
+    <button type="button" class="circle gray sm x" data-close aria-label="关上">${ic('x')}</button>
+    <img class="hero-pt" src="${ptImg(pt)}" alt="">
     <h2>${done ? `你今天已经帮过${esc(pt.who)}啦` : `${esc(pt.who)}来看病啦`}</h2>
-    <div class="say-text">${esc(pt.say)}</div>
+    <p class="lead">“${esc(pt.say)}”</p>
     <div class="stack">
-      <button type="button" class="big-btn" id="pt-say">🔊 再听一遍</button>
-      <button type="button" class="big-btn pink" id="pt-go">${done ? '再看一次' : '🩺 去帮它！'}</button>
+      <button type="button" class="pill block filled" id="pt-go">${ic('play')}${done ? '再看一次' : '去帮它'}</button>
+      <button type="button" class="pill block gray" id="pt-say">${ic('speaker')}再听一遍</button>
     </div>
     ${done ? '<p class="note">明天还会有新的小病人来敲门哦。</p>' : ''}`);
   const sayPt = () => { if (!$('#modal').hidden) say(`p-${pt.id}`, $('#pt-say')); };
@@ -348,14 +420,14 @@ function openPatient() {
 }
 
 // ---------- 地点 ----------
-const cardHTML = v => `<button type="button" class="vcard" data-vid="${esc(v.id)}">
-  <span class="cv"><img src="${esc(v.cover)}" alt="" loading="lazy" referrerpolicy="no-referrer">${likes[v.id] ? '<span class="heart">💗</span>' : ''}<span class="min">${esc(mins(v.duration))}</span></span>
-  <span class="vt"><span>${esc(v.kidTitle || v.title)}</span><span class="say small" role="button" tabindex="0" data-say="t-${esc(v.id)}" aria-label="听标题">🔊</span></span></button>`;
-function bindCards(root) {
+const tileHTML = v => `<button type="button" class="tile" data-vid="${esc(v.id)}">
+  <span class="cv"><img src="${esc(v.cover)}" alt="" loading="lazy" referrerpolicy="no-referrer">${likes[v.id] ? `<span class="heart glass">${ic('heart-f')}</span>` : ''}<span class="circle glass say-on" role="button" tabindex="0" data-say="t-${esc(v.id)}" aria-label="听标题">${ic('speaker')}</span></span>
+  <span class="meta"><span class="t"><b>${esc(v.kidTitle || v.title)}</b><span>${esc(mins(v.duration))}</span></span></span></button>`;
+function bindTiles(root) {
   root.onclick = e => {
     const s = e.target.closest('[data-say]');
     if (s) { e.stopPropagation(); say(s.dataset.say, s); return; }
-    const c = e.target.closest('.vcard');
+    const c = e.target.closest('.tile');
     if (c) go('watch/' + c.dataset.vid);
   };
 }
@@ -363,9 +435,11 @@ function renderPlace(id) {
   const p = placeById[id];
   $('#place-img').src = `assets/place-${id}.webp`;
   $('#place-name').textContent = p.name;
+  const list = VIDS.filter(v => v.category === p.cat);
+  $('#place-count').textContent = `${list.length} 个视频`;
   $('#place-say').onclick = e => say(`place-${id}`, e.currentTarget);
-  $('#place-cards').innerHTML = VIDS.filter(v => v.category === p.cat).map(cardHTML).join('');
-  bindCards($('#place-cards'));
+  $('#place-tiles').innerHTML = list.map(tileHTML).join('');
+  bindTiles($('#place-tiles'));
   $('#place-try').onclick = () => openTry(id);
 }
 
@@ -376,55 +450,59 @@ function embedUrl(v) {
 }
 function paintLike(v) {
   const b = $('#like-btn'), on = !!likes[v.id];
-  b.textContent = on ? '💗 我喜欢' : '🤍 喜欢';
+  b.innerHTML = on ? `${ic('heart-f')}我喜欢` : `${ic('heart')}喜欢`;
   b.classList.toggle('on', on);
   b.setAttribute('aria-pressed', on);
 }
 function renderWatch(id) {
   const v = byId[id], p = placeOf(v);
   const pt = fromPatient ? DATA.patients.find(x => x.id === fromPatient) : null;
-  $('#watch-back').textContent = pt ? '🏝️ 回岛上' : `⬅️ 回到${p.name}`;
+  $('#watch-back span').textContent = pt ? '岛上' : p.name;
   $('#watch-back').onclick = () => go(pt ? '' : 'place/' + p.id);
   const f = document.createElement('iframe');
   f.title = v.kidTitle; f.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture'; f.allowFullscreen = true;
   f.referrerPolicy = 'no-referrer-when-downgrade'; f.src = embedUrl(v);
   $('#player').innerHTML = ''; $('#player').appendChild(f);
-  $('#watch-title').textContent = v.kidTitle || v.title;
+  $('#watch-title').innerHTML = `${esc(v.kidTitle || v.title)}<span class="sub">${esc(p.name)} · ${esc(mins(v.duration))}</span>`;
   $('#watch-say').onclick = e => say(`t-${v.id}`, e.currentTarget);
   const strip = $('#watch-patient');
   strip.hidden = !pt;
-  strip.innerHTML = pt ? `<span class="pi">${pt.icon}</span><span>${esc(pt.who)}在等你的答案：${esc(pt.say)}</span>` : '';
+  strip.innerHTML = pt ? `<img src="${ptImg(pt)}" alt=""><p><b>${esc(pt.who)}在等你的答案</b><br>${esc(pt.say)}</p>` : '';
   $('#helped-btn').hidden = !pt;
   $('#helped-btn').onclick = () => {
     helped[today()] = pt.id; store.set(HELP_KEY, helped);
-    openRecord({title: `跟${pt.who}说一句话`, icon: pt.icon, line: 'line-afterPatient', kind: 'reply', label: `给${pt.who}的回答`, place: p.id});
+    openRecord({title: `跟${pt.who}说一句话`, img: ptImg(pt), line: 'line-afterPatient', kind: 'reply', label: `给${pt.who}的回答`, place: p.id});
   };
   paintLike(v);
   $('#like-btn').onclick = () => {
-    if (likes[v.id]) delete likes[v.id]; else { likes[v.id] = Date.now(); say('line-liked'); toast('记下啦！它住进你的探索本了'); }
+    if (likes[v.id]) delete likes[v.id]; else { likes[v.id] = Date.now(); say('line-liked'); toast('放进探索本啦', 'heart-f'); }
     store.set(LIKE_KEY, likes); paintLike(v);
   };
   $('#watch-try').onclick = () => openTry(p.id);
-  const c = v.caution ? `<p class="caution">家长提示：${esc(v.caution)}</p>` : '';
-  $('#watch-grown').innerHTML = `<summary>给大人看</summary><p>原标题：${esc(v.title)}</p><p>UP 主：<a href="${esc(v.channelUrl)}" target="_blank" rel="noopener noreferrer">${esc(v.channel)}</a>${v.orig ? `（原作者 ${esc(v.orig)}，转载）` : ''}</p><p>${esc(v.reason || '')}</p>${c}<p><a href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">去 B 站看高清</a>（会进 B 站推荐，孩子自己用时不建议点）</p>`;
-  $('#watch-grown').open = false;
+  $('#watch-grown').innerHTML = `
+    <div class="cell"><span class="t"><b>原标题</b><span>${esc(v.title)}</span></span></div>
+    <a class="cell" href="${esc(v.channelUrl)}" target="_blank" rel="noopener noreferrer"><span class="t"><b>UP 主</b><span>${esc(v.channel)}${v.orig ? `（原作者 ${esc(v.orig)}，转载）` : ''}</span></span><svg class="ic chev"><use href="#i-chev"/></svg></a>
+    ${v.reason ? `<div class="cell"><span class="t"><b>为什么选它</b><span>${esc(v.reason)}</span></span></div>` : ''}
+    ${v.caution ? `<div class="cell"><span class="t"><b class="caution">家长提示</b><span>${esc(v.caution)}</span></span></div>` : ''}
+    <a class="cell" href="${esc(v.url)}" target="_blank" rel="noopener noreferrer"><span class="t"><b>去 B 站看高清</b><span>会进 B 站的推荐，孩子自己用时不建议点</span></span><svg class="ic chev"><use href="#i-chev"/></svg></a>`;
 }
 
-// ---------- 弹窗 ----------
+// ---------- 弹层 ----------
 function openModal(html) { $('#sheet').innerHTML = html; $('#modal').hidden = false; }
 function closeModal() { stopRec(true); $('#modal').hidden = true; $('#sheet').innerHTML = ''; }
 $('#modal').addEventListener('click', e => { if (e.target.id === 'modal' || e.target.closest('[data-close]')) { hush(); closeModal(); } });
 
-// 我想试试
 function openTry(placeId) {
   const cards = DATA.tries[placeId]; let i = Math.floor(Math.random() * cards.length);
   const paint = () => {
-    openModal(`<button type="button" class="x" data-close aria-label="关上">✕</button>
-      <h2>✨ 我想试试</h2>
-      <div class="try-card">${esc(cards[i])}</div>
+    openModal(`<div class="grabber"></div>
+      <button type="button" class="circle gray sm x" data-close aria-label="关上">${ic('x')}</button>
+      <img class="try-art" src="assets/place-${placeId}.webp" alt="">
+      <h2>我想试试</h2>
+      <p class="lead">${esc(cards[i])}</p>
       <div class="stack">
-        <button type="button" class="big-btn" id="try-say">🔊 听一听</button>
-        <div class="row"><button type="button" class="big-btn" id="try-next">🔄 换一个</button><button type="button" class="big-btn pink" id="try-done">📸 我做到啦</button></div>
+        <button type="button" class="pill block filled" id="try-done">${ic('camera')}我做到啦，拍张照</button>
+        <div class="row"><button type="button" class="pill gray" id="try-say">${ic('speaker')}听一听</button><button type="button" class="pill gray" id="try-next">${ic('shuffle')}换一个</button></div>
       </div>
       <p class="note">想做就做，不做也没关系。</p>`);
     say(`try-${placeId}-${i}`, $('#try-say'));
@@ -444,8 +522,8 @@ $('#photo-input').addEventListener('change', async e => {
   try {
     const blob = await shrink(file, 1280);
     await addWork({type: 'photo', blob, ...photoCtx});
-    closeModal(); toast('放进探索本啦！');
-  } catch (err) { toast('没存上，再试一次'); }
+    closeModal(); toast('放进探索本啦');
+  } catch (err) { toast('没存上，再试一次', 'x'); }
   photoCtx = null;
 });
 function shrink(file, max) {
@@ -454,7 +532,7 @@ function shrink(file, max) {
     img.onload = () => {
       const k = Math.min(1, max / Math.max(img.width, img.height));
       const c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
-      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
       URL.revokeObjectURL(url);
       c.toBlob(b => b ? res(b) : rej(new Error('blob')), 'image/jpeg', .85);
     };
@@ -467,10 +545,11 @@ let rec = null, recChunks = [], recTimer = null, recStart = 0, recCtx = null, re
 const canRecord = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
 function openRecord(ctx) {
   recCtx = ctx;
-  openModal(`<button type="button" class="x" data-close aria-label="关上">✕</button>
-    ${ctx.icon ? `<div class="who-icon" aria-hidden="true">${ctx.icon}</div>` : ''}
+  openModal(`<div class="grabber"></div>
+    <button type="button" class="circle gray sm x" data-close aria-label="关上">${ic('x')}</button>
+    ${ctx.img ? `<img class="hero-pt" src="${ctx.img}" alt="" style="width:110px;height:110px">` : ''}
     <h2>${esc(ctx.title)}</h2>
-    ${canRecord ? `<button type="button" class="rec" id="rec-btn" aria-label="录音">🎤</button><div class="rec-time" id="rec-time">点一下开始说，说完再点一下</div>` : `<p class="say-text">这台设备不能录音，可以直接说给爸爸妈妈听哦。</p>`}
+    ${canRecord ? `<button type="button" class="rec" id="rec-btn" aria-label="录音">${ic('mic')}</button><div class="rec-time" id="rec-time">点一下开始说，说完再点一下</div>` : `<p class="lead">这台设备不能录音，可以直接说给爸爸妈妈听哦。</p>`}
     <p class="note">录音只存在这台设备上。</p>`);
   say(ctx.line);
   if (canRecord) $('#rec-btn').onclick = () => rec ? stopRec(false) : startRec();
@@ -489,12 +568,12 @@ async function startRec() {
     const blob = new Blob(recChunks, {type: r.mimeType || 'audio/webm'});
     if (blob.size < 800) { const t = $('#rec-time'); if (t) t.textContent = '好像没录到，再试一次'; return; }
     await addWork({type: 'voice', blob, kind: recCtx.kind, label: recCtx.label, place: recCtx.place || ''});
-    closeModal(); toast('录好啦，放进探索本了！');
+    closeModal(); toast('录好啦，放进探索本了');
     if (current.view === 'book') renderBook();
   };
   r.start(); recStart = Date.now();
-  $('#rec-btn').classList.add('on'); $('#rec-btn').textContent = '⏹';
-  recTimer = setInterval(() => { const s = Math.floor((Date.now() - recStart) / 1000); const t = $('#rec-time'); if (t) t.textContent = `正在录… ${s} 秒，说完点一下`; if (s >= 60) stopRec(false); }, 300);
+  const b = $('#rec-btn'); b.classList.add('on'); b.innerHTML = ic('stop');
+  recTimer = setInterval(() => { const s = Math.floor((Date.now() - recStart) / 1000); const t = $('#rec-time'); if (t) t.textContent = `正在录 0:${String(s).padStart(2, '0')}　说完点一下`; if (s >= 60) stopRec(false); }, 300);
 }
 function stopRec(discard) {
   clearInterval(recTimer);
@@ -507,27 +586,27 @@ const fmtDate = t => { const d = new Date(t); return `${d.getMonth() + 1}月${d.
 let blobUrls = [];
 async function renderBook() {
   $('#book-say').onclick = e => say('line-chest', e.currentTarget);
-  $('#wonder-btn').onclick = () => openRecord({title: '我想知道……', icon: '💭', line: 'line-wonder', kind: 'wonder', label: '我想知道'});
   blobUrls.forEach(u => URL.revokeObjectURL(u)); blobUrls = [];
   let works = [];
   try { works = await allWorks(); } catch {}
-  const tile = w => {
-    const u = URL.createObjectURL(w.blob); blobUrls.push(u);
-    const place = w.place && placeById[w.place] ? placeById[w.place].name : '';
-    const media = w.type === 'photo' ? `<img src="${u}" alt="">` : `<button type="button" class="voice" data-audio="${u}" aria-label="播放录音">▶️</button>`;
-    return `<div class="work">${media}<div class="wt"><b>${esc(w.label || '')}</b>${fmtDate(w.at)}${place ? ` · ${esc(place)}` : ''}</div><button type="button" class="del" data-del="${w.id}" aria-label="删除">🗑</button></div>`;
-  };
-  const made = works.filter(w => w.kind !== 'wonder'), wonders = works.filter(w => w.kind === 'wonder');
-  $('#book-works-box').innerHTML = made.length ? `<div class="works">${made.map(tile).join('')}</div>`
-    : '<p class="empty">还空空的。去岛上点“✨ 我想试试”，做到了就拍张照放进来吧！</p>';
-  $('#book-wonders').innerHTML = wonders.map(tile).join('');
+  const url = w => { const u = URL.createObjectURL(w.blob); blobUrls.push(u); return u; };
+  const placeName = w => w.place && placeById[w.place] ? placeById[w.place].name : '';
+  const photos = works.filter(w => w.type === 'photo');
+  const voices = works.filter(w => w.type === 'voice');
+  $('#book-photos').innerHTML = photos.length
+    ? `<div class="photos">${photos.map(w => `<div class="ph"><img src="${url(w)}" alt=""><span class="cap">${fmtDate(w.at)}${placeName(w) ? ` · ${esc(placeName(w))}` : ''}</span><button type="button" class="circle del" data-del="${w.id}" aria-label="删除">${ic('x')}</button></div>`).join('')}</div>`
+    : '<p class="empty">还空空的。去岛上点“我想试试”，做到了就拍张照放进来吧！</p>';
+  const ask = `<button type="button" class="cell" id="wonder-btn"><span class="circle tinted sm">${ic('mic')}</span><span class="t"><b>我有一个问题</b><span>点一下，说给爸爸听</span></span><svg class="ic chev"><use href="#i-chev"/></svg></button>`;
+  $('#book-wonders').innerHTML = ask + voices.map(w => `<div class="cell voice-cell"><button type="button" class="circle sm play" data-audio="${url(w)}" aria-label="播放">${ic('play')}</button><span class="t"><b>${esc(w.label || '录音')}</b><span>${fmtDate(w.at)}${placeName(w) ? ` · ${esc(placeName(w))}` : ''}</span></span><button type="button" class="circle sm del" data-del="${w.id}" aria-label="删除">${ic('trash')}</button></div>`).join('');
+  $('#wonder-btn').onclick = () => openRecord({title: '我想知道……', line: 'line-wonder', kind: 'wonder', label: '我想知道'});
   const liked = VIDS.filter(v => likes[v.id]).sort((a, b) => likes[b.id] - likes[a.id]);
-  $('#book-likes').innerHTML = liked.map(cardHTML).join('') || '<p class="empty" style="grid-column:1/-1;margin:0">看到喜欢的视频，点“🤍 喜欢”，它就会住到这里。</p>';
-  bindCards($('#book-likes'));
+  $('#book-likes').innerHTML = liked.length ? `<div class="tiles" style="padding-top:0">${liked.map(tileHTML).join('')}</div>`
+    : '<p class="empty">看到喜欢的视频，点“喜欢”，它就会住到这里。</p>';
+  const t = $('#book-likes .tiles'); if (t) bindTiles(t);
 }
 document.addEventListener('click', async e => {
   const a = e.target.closest('[data-audio]');
-  if (a) { say(a.dataset.audio); return; }
+  if (a) { say(a.dataset.audio, a); return; }
   const d = e.target.closest('[data-del]');
   if (d && confirm('要从探索本里删掉这一个吗？')) { await delWork(+d.dataset.del); renderBook(); }
 });
